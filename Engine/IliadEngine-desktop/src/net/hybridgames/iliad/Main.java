@@ -2,6 +2,7 @@ package net.hybridgames.iliad;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.iliadonline.client.IliadClient;
 
 public class Main {
 	public static void main(String[] args) {
