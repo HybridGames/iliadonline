@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="libs/gdx.jar" sourcepath="libs/gdx-sources.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IliadShared"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/IliadServer"/>
+	<classpathentry kind="lib" path="/IliadEngine-android/libs/guava-r09.jar"/>
+	<classpathentry kind="lib" path="/IliadEngine-android/libs/jackson-core-asl-1.8.4.jar"/>
+	<classpathentry kind="lib" path="/IliadEngine-android/libs/jackson-mapper-asl-1.8.4.jar"/>
+	<classpathentry kind="lib" path="/IliadEngine-android/libs/ouya-sdk.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/gdx-controllers.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
