@@ -1,5 +1,6 @@
 package com.iliadonline.client.assets;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URLEncoder;
@@ -42,15 +43,21 @@ public class RemoteFileResolver implements FileHandleResolver
 		//TODO: Need some way to clean the added file information, it's giving a fully qualified path
 		Gdx.app.log(tag, "FileName: " + fileName);
 		
-		FileHandle child = dataDir.child(fileName);
+		String pathMask = dataDir.file().getAbsolutePath();
+		String newChild = fileName.replace(pathMask, "");
+		
+		Gdx.app.log(tag, "pathMask: " + pathMask);
+		Gdx.app.log(tag, "FileName relative path: " + newChild);
+		
+		FileHandle child = dataDir.child(newChild);
 		if(!child.exists())
 		{
 			RemoteFileHandle remoteFile;
 			try
 			{
-				fileName = fileName.replaceFirst("/", "");
-				Gdx.app.log(tag, "http://hybridgames.net/iliad/assets/" + fileName);
-				remoteFile = new RemoteFileHandle("http://hybridgames.net/iliad/assets/" + fileName);
+				newChild = newChild.replaceFirst("/", "");
+				Gdx.app.log(tag, "http://hybridgames.net/iliad/assets/" + newChild);
+				remoteFile = new RemoteFileHandle("http://hybridgames.net/iliad/assets/" + newChild);
 				return remoteFile;
 			}
 			catch (MalformedURLException e)
