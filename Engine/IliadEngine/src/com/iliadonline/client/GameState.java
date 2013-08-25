@@ -42,7 +42,7 @@ public class GameState
 	
 	private Message msg;
 	
-	protected float epsilon = 0.0001f;
+	protected float epsilon = 0.2f;
 	
 	public enum GameStateEnum
 	{
@@ -227,15 +227,15 @@ public class GameState
 					
 					if(Math.abs(x) > epsilon)
 					{
-						player.getLocation().x += shift * controller.getAxis(Ouya.AXIS_LEFT_X);
+						player.getLocation().x += shift * x;
 					}
 					
 					if(Math.abs(y) > epsilon)
 					{
-						player.getLocation().y -= shift * controller.getAxis(Ouya.AXIS_LEFT_Y);
+						player.getLocation().y -= shift * y;
 					}
 					
-					//Gdx.app.log(tag, String.valueOf(controller.getAxis(Ouya.AXIS_LEFT_X)));
+					Gdx.app.log(tag, String.valueOf(x));
 				}
 				break;
 			case Paused:
