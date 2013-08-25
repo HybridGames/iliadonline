@@ -184,7 +184,13 @@ public class GameState
 	 */
 	protected void processInputOuya()
 	{	
-		//TODO: We could pull this controller find out into an earlier part of the game state
+		if(Controllers.getControllers().size <= 0)
+		{
+			//End processing, no controller found
+			return;
+		}
+		
+		
 		Controller controller = Controllers.getControllers().get(0);
 		if(Controllers.getControllers().get(0) == null)
 		{
