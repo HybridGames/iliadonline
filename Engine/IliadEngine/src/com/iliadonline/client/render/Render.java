@@ -43,6 +43,7 @@ public class Render
 	private OrthographicCamera camera;
 	private ShapeRenderer shapes;
 	private SpriteBatch batch;
+	private SpriteBatch hudBatch;
 	
 	private Sprite char1;
 
@@ -80,6 +81,7 @@ public class Render
 		
 		camera = new OrthographicCamera(width, height);
 		batch = new SpriteBatch();
+		hudBatch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 		font = this.getFont("arial32");
 		
@@ -102,6 +104,7 @@ public class Render
 		camera = new OrthographicCamera(width, height);
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
+		hudBatch = new SpriteBatch();
 		//font = this.getFont("arial32");
 		
 		this.assetManager.load("gfx/fonts/arial32.fnt", BitmapFont.class);
@@ -130,15 +133,20 @@ public class Render
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		batch.begin();
+		hudBatch.begin();
 		
 		//TODO: have Render get assets after they're loaded, not at every call to render
 		font = this.assetManager.get("gfx/fonts/arial32.fnt", BitmapFont.class);
 		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
-		font.draw(batch, str + " - " + stateStr, 100, 100);
+		font.draw(hudBatch, str + " - " + stateStr, 100, 100);
+				
+		hudBatch.end();
+		
 		if(state.getState() == GameStateEnum.Authenticated)
 		{
+			batch.begin();
+			
 			Location location = state.getPlayer().getLocation();
 			camera.position.set(location.x, location.y, 0);
 			camera.update();
@@ -156,10 +164,16 @@ public class Render
 			shapes.line(x, y-10, x+10, y);
 			shapes.end();
 			
-			font.draw(batch, "[" + location.x + ", " + location.y + "]", 100, 1000);
+			batch.end();
+		
+			hudBatch.begin();
+			
+			font.draw(hudBatch, "[" + location.x + ", " + location.y + "]", 100, 1000);
+						
+			hudBatch.end();
 		}
 		
-		batch.end();
+		
 		
 		//Iterate over the Renderable Elements
 		//TODO: Need a strategy to pass the renderable objects from the GameState so they are layered properly.
