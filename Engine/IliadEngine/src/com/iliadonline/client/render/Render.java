@@ -38,6 +38,7 @@ public class Render
 	
 	private FileHandle gfxDir;
 	protected AssetManager assetManager;
+	protected Hud hud;
 	private int width, height;
 	
 	private OrthographicCamera camera;
@@ -53,8 +54,7 @@ public class Render
 	private HashMap<String, BitmapFont> fonts;
 	
 	private MainMenu mainMenu;
-	
-	private CharSequence str = "Iliad Online Beta 0.0.1";
+
 	protected CharSequence stateStr = "";
 	
 	BitmapFont font;
@@ -104,8 +104,8 @@ public class Render
 		camera = new OrthographicCamera(width, height);
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
-		hudBatch = new SpriteBatch();
-		//font = this.getFont("arial32");
+		
+		hud = new Hud(this.assetManager);
 		
 		this.assetManager.load("gfx/fonts/arial32.fnt", BitmapFont.class);
 		
@@ -124,24 +124,11 @@ public class Render
 			return;
 		}
 		
-		
-		
-		//Get Renderable Elements from GameState
-		stateStr = state.getState().name();
-		
 		//Clear the buffer
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		hudBatch.begin();
 		
-		//TODO: have Render get assets after they're loaded, not at every call to render
-		font = this.assetManager.get("gfx/fonts/arial32.fnt", BitmapFont.class);
-		font.setColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-		font.draw(hudBatch, str + " - " + stateStr, 100, 100);
-				
-		hudBatch.end();
 		
 		if(state.getState() == GameStateEnum.Authenticated)
 		{
@@ -165,15 +152,9 @@ public class Render
 			shapes.end();
 			
 			batch.end();
-		
-			hudBatch.begin();
-			
-			font.draw(hudBatch, "[" + location.x + ", " + location.y + "]", 100, 1000);
-						
-			hudBatch.end();
 		}
 		
-		
+		this.hud.render(state);		
 		
 		//Iterate over the Renderable Elements
 		//TODO: Need a strategy to pass the renderable objects from the GameState so they are layered properly.
