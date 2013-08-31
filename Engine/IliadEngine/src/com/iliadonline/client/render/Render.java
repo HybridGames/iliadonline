@@ -36,7 +36,6 @@ public class Render
 {
 	private static final String tag = "com.iliadonline.client.render.Render";
 	
-	private FileHandle gfxDir;
 	protected AssetManager assetManager;
 	protected Hud hud;
 	private int width, height;
@@ -44,7 +43,6 @@ public class Render
 	private OrthographicCamera camera;
 	private ShapeRenderer shapes;
 	private SpriteBatch batch;
-	private SpriteBatch hudBatch;
 	
 	private Sprite char1;
 
@@ -53,41 +51,9 @@ public class Render
 	private HashMap<String, Sprite> sprites;
 	private HashMap<String, BitmapFont> fonts;
 	
-	private MainMenu mainMenu;
-
-	protected CharSequence stateStr = "";
+	//private MainMenu mainMenu;
 	
 	BitmapFont font;
-	
-	/**
-	 * Constructor for Render
-	 * @param gfxDir Directory to the Graphics files
-	 * @param width
-	 * @param height
-	 */
-	public Render(FileHandle gfxDir, int width, int height)
-	{
-		if(!gfxDir.isDirectory())
-		{
-			throw new IllegalArgumentException("gfxDir must be a directory. A valid directory containing the game's graphics must be supplied.");
-		}
-		
-		this.gfxDir = gfxDir;
-		this.loadSprites(gfxDir.child("sprites"));
-		//TODO: Fix the font issue: http://stackoverflow.com/questions/17513460/libgdx-unable-to-find-files-in-android-application-data-directory
-		this.loadFonts(gfxDir.child("fonts"));
-		
-		this.resize(width, height);
-		
-		camera = new OrthographicCamera(width, height);
-		batch = new SpriteBatch();
-		hudBatch = new SpriteBatch();
-		shapes = new ShapeRenderer();
-		font = this.getFont("arial32");
-		
-		mainMenu = new MainMenu(this);
-		Gdx.input.setInputProcessor(mainMenu);	//TODO: Should this be somewhere else?
-	}
 	
 	/**
 	 * Constructor for Render, using AssetManager
