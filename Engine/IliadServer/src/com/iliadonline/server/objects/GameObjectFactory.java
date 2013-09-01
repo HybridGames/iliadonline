@@ -1,4 +1,4 @@
-package com.iliadonline.server.data;
+package com.iliadonline.server.objects;
 
 import java.util.HashMap;
 

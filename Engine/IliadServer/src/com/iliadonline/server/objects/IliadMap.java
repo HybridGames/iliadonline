@@ -1,4 +1,4 @@
-package com.iliadonline.server.data;
+package com.iliadonline.server.objects;
 
 public class IliadMap extends com.iliadonline.shared.data.IliadMap
 {

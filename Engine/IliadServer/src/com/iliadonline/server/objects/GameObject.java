@@ -1,4 +1,4 @@
-package com.iliadonline.server.data;
+package com.iliadonline.server.objects;
 
 import com.iliadonline.shared.components.Collider;
 
