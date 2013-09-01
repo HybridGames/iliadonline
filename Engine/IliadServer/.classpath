@@ -6,5 +6,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/IliadShared"/>
 	<classpathentry kind="lib" path="/IliadShared/libs/org-json.jar"/>
 	<classpathentry kind="lib" path="/IliadEngine/libs/gdx.jar" sourcepath="/IliadEngine/libs/gdx-sources.jar"/>
+	<classpathentry kind="lib" path="libs/hsqldb.jar"/>
+	<classpathentry kind="lib" path="libs/sqltool.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
