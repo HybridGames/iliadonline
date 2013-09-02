@@ -4,7 +4,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.iliadonline.server.managers.ClientManager;
 import com.iliadonline.server.managers.ServerGameState;
 import com.iliadonline.shared.network.Client;
 import com.iliadonline.shared.network.Message;
@@ -15,14 +14,14 @@ public class LocalServer implements ServerInterface
 	
 	private ServerGameState serverState;
 	private ConcurrentLinkedQueue<Message> serverMessages;
-	private ClientManager clientManager = new ClientManager();
 	
 	private Client client;
 	
 	public LocalServer(FileHandle dataDir)
 	{
 		serverMessages = new ConcurrentLinkedQueue<Message>();
-		serverState = new ServerGameState(dataDir, serverMessages, clientManager);
+		serverState = new ServerGameState(dataDir);
+		serverState.setIncomingQueue(serverMessages);
 		
 		Gdx.app.log(tag, "Server Starting");
 		
@@ -45,7 +44,7 @@ public class LocalServer implements ServerInterface
 	@Override
 	public void connect()
 	{
-		this.client = this.clientManager.newClient(null);
+		this.client = this.serverState.newClient(null);
 	}
 
 	@Override

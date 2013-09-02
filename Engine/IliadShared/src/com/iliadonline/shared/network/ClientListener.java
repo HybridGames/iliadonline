@@ -11,8 +11,9 @@ public interface ClientListener
 {
 	/**
 	 * A new socket is ready to be Accepted, request a new Client object to attach to the socket.<br />
-	 * V1.2 Passes the SocketChannel object into the newClient call. This allows hooking into the basic sockets if desired.<br />
-	 * @param SocketChannel - The socket that is connecting. Provides access to basic socket information.
+	 * Passes the SocketChannel object into the newClient call. This allows hooking into the basic sockets if desired.<br />
+	 * Socket May be NULL<br />
+	 * @param socket SocketChannel - The socket that is connecting. Provides access to basic socket information.
 	 * @return
 	 */
 	public Client newClient(SocketChannel socket);

@@ -3,16 +3,12 @@ package com.iliadonline.client;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import tv.ouya.console.api.OuyaController;
 import tv.ouya.console.api.OuyaFacade;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.ControllerAdapter;
-import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
@@ -26,7 +22,7 @@ import com.iliadonline.shared.network.Message;
 
 /**
  * Responsible for holding the the client's view of the game data
- * TODO Need some way to return a set of renderable objects, but have proper layering 
+ * TODO Need some way to return a set of render-able objects, but have proper layering 
  */
 public class GameState
 {

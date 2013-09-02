@@ -12,7 +12,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.iliadonline.server.IliadNetworkClient;
 import com.iliadonline.server.data.DataInterface;
 import com.iliadonline.server.data.HsqlDataProvider;
 import com.iliadonline.server.objects.GameObject;
@@ -30,7 +29,7 @@ import com.iliadonline.shared.network.Message;
  * 
  * This allows us to have a networked, multiplayer server, and a local, in instance server
  */
-public class ServerGameState implements Runnable
+public class ServerGameState implements ClientListener, Runnable
 {
 	private static final String tag = "com.iliadonline.server.managers.ServerGameState";
 	
@@ -52,11 +51,15 @@ public class ServerGameState implements Runnable
 	
 	private GameObject gameObject;
 	
-	public ServerGameState(FileHandle dataDir, ConcurrentLinkedQueue<Message> incomingMessages, ClientManager clientManager)
+	/**
+	 * Basic constructor
+	 * dataDir tells the Server were to look for and/or create data files, including any database files
+	 * @param dataDir
+	 */
+	public ServerGameState(FileHandle dataDir)
 	{
 		this.dataDir = dataDir;
-		this.incoming = incomingMessages;
-		this.clientManager = clientManager;
+		this.clientManager = new ClientManager();
 		
 		//Connect to Data
 		//Initialize Database
@@ -66,6 +69,11 @@ public class ServerGameState implements Runnable
 		this.connectDatabase(dbDir);
 		
 		uuid = new UUID(Integer.MIN_VALUE);
+	}
+	
+	public void setIncomingQueue(ConcurrentLinkedQueue<Message> incoming)
+	{
+		this.incoming = incoming;
 	}
 	
 	/**
@@ -108,7 +116,7 @@ public class ServerGameState implements Runnable
 		}
 			
 		message = incoming.poll();
-		IliadNetworkClient client = (IliadNetworkClient)message.client;
+		Client client = message.client;
 		
 		Gdx.app.log(tag, "Message Received: " + message.toString());
 				
@@ -166,5 +174,29 @@ public class ServerGameState implements Runnable
 			this.processMessage();
 			//this.update();
 		}
+	}
+	
+	@Override
+	public Client newClient(SocketChannel socket)
+	{
+		Client client = new Client();
+		clientManager.addClient(client);
+		return client;
+	}
+
+	@Override
+	public void closeClient(Client client, boolean graceful)
+	{
+		
+		if(graceful)
+		{
+			clientManager.removeClient(client);
+		}
+		else
+		{
+			//TODO: how to handle non graceful quits
+			clientManager.removeClient(client);
+		}
+		
 	}
 }

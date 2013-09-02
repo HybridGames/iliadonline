@@ -1,42 +1,42 @@
 package com.iliadonline.server.managers;
 
-import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
-import com.iliadonline.server.IliadNetworkClient;
-import com.iliadonline.server.ServerHelper;
 import com.iliadonline.shared.network.Client;
-import com.iliadonline.shared.network.ClientListener;
 import com.iliadonline.shared.network.Message;
 
-public class ClientManager implements ClientListener
+/**
+ * A support class for the ServerGameState
+ * Holds the clients, and provides some basic functionality.
+ */
+public class ClientManager
 {
-	protected ArrayList<IliadNetworkClient> clients;
+	protected ArrayList<Client> clients;
 
 	/**
 	 * Default Constructor
 	 */
 	public ClientManager()
 	{
-		this.clients = new ArrayList<IliadNetworkClient>();
+		this.clients = new ArrayList<Client>();
 	}
 
 	/**
-	 * newClient from ClientListener
-	 */
-	@Override
-	public Client newClient(SocketChannel socket)
-	{
-		return new IliadNetworkClient();
-	}
-
-	/**
-	 * Removes a client from the currently active list
+	 * Simple Add
 	 * 
 	 * @param client
-	 * @param graceful
 	 */
-	public void closeClient(Client client, boolean graceful)
+	public void addClient(Client client)
+	{
+		clients.add(client);
+	}
+
+	/**
+	 * Simple Remove
+	 * 
+	 * @param client
+	 */
+	public void removeClient(Client client)
 	{
 		clients.remove(client);
 	}
@@ -48,7 +48,7 @@ public class ClientManager implements ClientListener
 	 */
 	public void sendAll(Message msg)
 	{
-		for (IliadNetworkClient client : clients)
+		for(Client client : clients)
 		{
 			client.sendMessage(msg);
 		}

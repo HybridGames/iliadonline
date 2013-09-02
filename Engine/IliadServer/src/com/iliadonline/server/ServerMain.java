@@ -49,11 +49,11 @@ public class ServerMain
 		this.serverDir = serverDir;
 		this.loadConfiguration();
 		
-		clientManager = new ClientManager();
+		serverState = new ServerGameState(new FileHandle(serverDir));
 
 		try
 		{
-			network = new Network(clientManager, this.port);			
+			network = new Network(serverState, this.port);			
 		}
 		catch (IOException e)
 		{
@@ -61,7 +61,7 @@ public class ServerMain
 			e.printStackTrace();
 		}
 
-		serverState = new ServerGameState(new FileHandle(serverDir), network.getIncomingQueue(), clientManager);
+		serverState.setIncomingQueue(network.getIncomingQueue());
 		
 		new Thread(serverState).start();
 		new Thread(network).start();
