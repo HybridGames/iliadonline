@@ -1,33 +1,38 @@
 package com.iliadonline.server.managers;
 
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 
 import com.iliadonline.server.IliadNetworkClient;
 import com.iliadonline.server.ServerHelper;
 import com.iliadonline.shared.network.Client;
+import com.iliadonline.shared.network.ClientListener;
 import com.iliadonline.shared.network.Message;
 
-public class ClientManager {
+public class ClientManager implements ClientListener
+{
 	protected ArrayList<IliadNetworkClient> clients;
-	
+
+	/**
+	 * Default Constructor
+	 */
 	public ClientManager()
 	{
 		this.clients = new ArrayList<IliadNetworkClient>();
 	}
-	
+
 	/**
-	 * Creates a new client
-	 * @return
+	 * newClient from ClientListener
 	 */
-	public IliadNetworkClient newClient(int uuid)
+	@Override
+	public Client newClient(SocketChannel socket)
 	{
-		IliadNetworkClient client = new IliadNetworkClient(uuid);
-		clients.add(client);
-		return client;
+		return new IliadNetworkClient();
 	}
-	
+
 	/**
 	 * Removes a client from the currently active list
+	 * 
 	 * @param client
 	 * @param graceful
 	 */
@@ -35,14 +40,15 @@ public class ClientManager {
 	{
 		clients.remove(client);
 	}
-	
+
 	/**
 	 * Sends a message to all clients
+	 * 
 	 * @param msg
 	 */
 	public void sendAll(Message msg)
 	{
-		for(IliadNetworkClient client : clients)
+		for (IliadNetworkClient client : clients)
 		{
 			client.sendMessage(msg);
 		}

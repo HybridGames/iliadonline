@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.iliadonline.server.IliadNetworkClient;
 import com.iliadonline.server.data.DataInterface;
 import com.iliadonline.server.data.HsqlDataProvider;
+import com.iliadonline.server.objects.GameObject;
 import com.iliadonline.server.objects.IliadMap;
 import com.iliadonline.shared.network.ByteConverter;
 import com.iliadonline.shared.network.Client;
@@ -27,29 +30,34 @@ import com.iliadonline.shared.network.Message;
  * 
  * This allows us to have a networked, multiplayer server, and a local, in instance server
  */
-public class ServerGameState implements ClientListener, Runnable
+public class ServerGameState implements Runnable
 {
 	private static final String tag = "com.iliadonline.server.managers.ServerGameState";
 	
 	protected FileHandle dataDir;
+	protected ClientManager clientManager;
+	private ConcurrentLinkedQueue<Message> incoming;
+	
 	protected DataInterface data;
 	
 	protected ArrayList<IliadMap> maps;
+	protected ObjectMap<Client, GameObject> clientObjectMap;	//Maps clients to the GameObject that is their character
 
-	protected ClientManager clientManager = new ClientManager();
-	
 	private UUID uuid;
 	private long currentTime;
 	
-	private ConcurrentLinkedQueue<Message> incoming;
 	private Message message;
 	private boolean running;
 	private boolean paused;
 	
-	private Logger logger;
+	private GameObject gameObject;
 	
-	public ServerGameState(FileHandle dataDir)
+	public ServerGameState(FileHandle dataDir, ConcurrentLinkedQueue<Message> incomingMessages, ClientManager clientManager)
 	{
+		this.dataDir = dataDir;
+		this.incoming = incomingMessages;
+		this.clientManager = clientManager;
+		
 		//Connect to Data
 		//Initialize Database
 		//Load Data
@@ -58,13 +66,13 @@ public class ServerGameState implements ClientListener, Runnable
 		this.connectDatabase(dbDir);
 		
 		uuid = new UUID(Integer.MIN_VALUE);
-		
-		logger = new Logger(ServerGameState.tag);
-		logger.setLevel(Logger.INFO);
-		
-		this.setIncoming(incoming);
 	}
 	
+	/**
+	 * Helper function that establishes our connection to the database.
+	 * TODO: Should initialize the database with proper schema
+	 * @param dbDir
+	 */
 	protected void connectDatabase(FileHandle dbDir)
 	{
 		if(!dbDir.exists())
@@ -74,11 +82,9 @@ public class ServerGameState implements ClientListener, Runnable
 		this.data = new HsqlDataProvider(dbDir.file());
 	}
 	
-	public void setIncoming(ConcurrentLinkedQueue<Message> incoming)
-	{
-		this.incoming = incoming;
-	}
-	
+	/**
+	 * Periodic update of game data
+	 */
 	public void update()
 	{
 		currentTime = System.nanoTime();
@@ -90,14 +96,13 @@ public class ServerGameState implements ClientListener, Runnable
 		}
 	}
 	
+	/**
+	 * One of the primary worker methods for this class.
+	 * Processes the next, single, message in the queue.
+	 */
 	protected void processMessage()
 	{
-		if(this.incoming == null)
-		{
-			return;
-		}
-		
-		if(this.incoming.isEmpty())
+		if(this.incoming == null || this.incoming.isEmpty())
 		{
 			return;
 		}
@@ -105,9 +110,9 @@ public class ServerGameState implements ClientListener, Runnable
 		message = incoming.poll();
 		IliadNetworkClient client = (IliadNetworkClient)message.client;
 		
-		//logger.info("Server Message Received: " + message.toString());
+		Gdx.app.log(tag, "Message Received: " + message.toString());
 				
-		//TODO: Look into a strategy pattern to clean this up long term
+		//TODO: Look into a strategy pattern or perhaps event system to clean this up long term
 		switch(message.command)
 		{
 			case 0:	//HeartBeat
@@ -116,10 +121,12 @@ public class ServerGameState implements ClientListener, Runnable
 			case 1: //Current location
 				IntBuffer locBuffer = ByteBuffer.wrap(message.data).asIntBuffer();
 				
+				gameObject = clientObjectMap.get(message.client);
+				
 				try
 				{
-					client.x = locBuffer.get(0);
-					client.y = locBuffer.get(1);
+					gameObject.getLocation().x = locBuffer.get(0);
+					gameObject.getLocation().y = locBuffer.get(1);
 				}
 				catch (NullPointerException e)
 				{
@@ -132,32 +139,15 @@ public class ServerGameState implements ClientListener, Runnable
 				//logger.info("Client Location: " + client.getId() + "(" + client.x + "," + client.y + ")");
 				
 				ByteBuffer buffer = ByteBuffer.allocate(256);
-				buffer.putInt(client.getId());
-				buffer.putInt(client.x);
-				buffer.putInt(client.y);
+				buffer.putInt(gameObject.getId());
+				buffer.putInt((int)gameObject.getLocation().x);
+				buffer.putInt((int)gameObject.getLocation().y);
 				
 				buffer.flip();
 				
 				clientManager.sendAll(new Message((byte)1, buffer.array(), null));
 				break;
 		}
-	}
-
-	@Override
-	public Client newClient(SocketChannel socket) 
-	{
-		IliadNetworkClient client = clientManager.newClient(uuid.getUUID());
-		
-		Message msg = new Message((byte)-1, ByteConverter.IntToByteArray(client.getId()), client);
-		client.sendMessage(msg);
-		
-		return client;
-	}
-
-	@Override
-	public void closeClient(Client client, boolean graceful) 
-	{
-		clientManager.closeClient(client, graceful);
 	}
 
 	@Override
