@@ -21,7 +21,7 @@ public class LocalServer implements ServerInterface
 	{
 		serverMessages = new ConcurrentLinkedQueue<Message>();
 		serverState = new ServerGameState(dataDir);
-		serverState.setIncoming(serverMessages);
+		serverState.setIncomingQueue(serverMessages);
 		
 		Gdx.app.log(tag, "Server Starting");
 		
