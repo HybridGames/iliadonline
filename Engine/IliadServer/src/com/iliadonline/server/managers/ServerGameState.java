@@ -1,5 +1,6 @@
 package com.iliadonline.server.managers;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.SocketChannel;
@@ -10,17 +11,28 @@ import java.util.logging.Level;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Logger;
 import com.iliadonline.server.IliadNetworkClient;
-import com.iliadonline.server.data.IliadMap;
+import com.iliadonline.server.data.DataInterface;
+import com.iliadonline.server.data.HsqlDataProvider;
+import com.iliadonline.server.objects.IliadMap;
 import com.iliadonline.shared.network.ByteConverter;
 import com.iliadonline.shared.network.Client;
 import com.iliadonline.shared.network.ClientListener;
 import com.iliadonline.shared.network.Message;
 
+/**
+ * ServerGameState acts as the main running loop for the server.
+ * 
+ * Communication is done through a set of incoming and outgoing ConcurrentLinkedQueues of Messages
+ * Each Client to the system will have it's own outgoing queue, and there is a single incoming queue
+ * 
+ * This allows us to have a networked, multiplayer server, and a local, in instance server
+ */
 public class ServerGameState implements ClientListener, Runnable
 {
 	private static final String tag = "com.iliadonline.server.managers.ServerGameState";
 	
 	protected FileHandle dataDir;
+	protected DataInterface data;
 	
 	protected ArrayList<IliadMap> maps;
 
@@ -37,12 +49,29 @@ public class ServerGameState implements ClientListener, Runnable
 	private Logger logger;
 	
 	public ServerGameState(FileHandle dataDir)
-	{		
-		//TODO: With persistence, we need determine the next UUID once items are loaded
+	{
+		//Connect to Data
+		//Initialize Database
+		//Load Data
+		//Initialize GameState
+		FileHandle dbDir = dataDir.child("db/db");
+		this.connectDatabase(dbDir);
+		
 		uuid = new UUID(Integer.MIN_VALUE);
 		
 		logger = new Logger(ServerGameState.tag);
 		logger.setLevel(Logger.INFO);
+		
+		this.setIncoming(incoming);
+	}
+	
+	protected void connectDatabase(FileHandle dbDir)
+	{
+		if(!dbDir.exists())
+		{
+			dbDir.mkdirs();
+		}
+		this.data = new HsqlDataProvider(dbDir.file());
 	}
 	
 	public void setIncoming(ConcurrentLinkedQueue<Message> incoming)
