@@ -10,6 +10,7 @@
 	<classpathentry kind="lib" path="/IliadEngine/libs/gdx-controllers.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/ouya-sdk.jar"/>
 	<classpathentry exported="true" kind="lib" path="/IliadEngine/libs/gdx.jar" sourcepath="/IliadEngine/libs/gdx-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/IliadServer/libs/hsqldb.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/IliadEngine"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/IliadServer"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/IliadShared"/>
