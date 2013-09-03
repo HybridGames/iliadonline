@@ -45,7 +45,7 @@ public class Hud
 		if(state.getState() == GameStateEnum.Authenticated)
 		{
 			Location location = state.getPlayer().getLocation();
-			font.draw(batch, "[" + location.x + ", " + location.y + "]", 100, 1000);
+			font.draw(batch, "[" + location.getX() + ", " + location.getY() + "]", 100, 1000);
 		}
 		
 		batch.end();

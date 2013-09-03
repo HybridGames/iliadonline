@@ -134,8 +134,8 @@ public class ServerGameState implements ClientListener, Runnable
 				
 				try
 				{
-					gameObject.getLocation().x = locBuffer.get(0);
-					gameObject.getLocation().y = locBuffer.get(1);
+					gameObject.getLocation().setX(locBuffer.get(0));
+					gameObject.getLocation().setY(locBuffer.get(1));
 				}
 				catch (NullPointerException e)
 				{
@@ -149,8 +149,8 @@ public class ServerGameState implements ClientListener, Runnable
 				
 				ByteBuffer buffer = ByteBuffer.allocate(256);
 				buffer.putInt(gameObject.getId());
-				buffer.putInt((int)gameObject.getLocation().x);
-				buffer.putInt((int)gameObject.getLocation().y);
+				buffer.putInt((int)gameObject.getLocation().getX());
+				buffer.putInt((int)gameObject.getLocation().getY());
 				
 				buffer.flip();
 				
