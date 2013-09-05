@@ -101,12 +101,12 @@ public class Render
 			batch.begin();
 			
 			Location location = state.getPlayer().getLocation();
-			camera.position.set(location.x, location.y, 0);
+			camera.position.set(location.getX(), location.getY(), 0);
 			camera.update();
 			camera.apply(Gdx.graphics.getGL11());
 		
-			int x = Math.round(location.x);
-			int y = Math.round(location.y);
+			int x = (int)(location.getX());
+			int y = (int)(location.getY());
 			
 			shapes.begin(ShapeType.Line);
 			shapes.setProjectionMatrix(camera.combined);

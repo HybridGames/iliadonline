@@ -60,6 +60,7 @@ public class ServerGameState implements ClientListener, Runnable
 	{
 		this.dataDir = dataDir;
 		this.clientManager = new ClientManager();
+		this.clientObjectMap = new ObjectMap<Client, GameObject>();
 		
 		//Connect to Data
 		//Initialize Database
@@ -133,8 +134,8 @@ public class ServerGameState implements ClientListener, Runnable
 				
 				try
 				{
-					gameObject.getLocation().x = locBuffer.get(0);
-					gameObject.getLocation().y = locBuffer.get(1);
+					gameObject.getLocation().setX(locBuffer.get(0));
+					gameObject.getLocation().setY(locBuffer.get(1));
 				}
 				catch (NullPointerException e)
 				{
@@ -148,8 +149,8 @@ public class ServerGameState implements ClientListener, Runnable
 				
 				ByteBuffer buffer = ByteBuffer.allocate(256);
 				buffer.putInt(gameObject.getId());
-				buffer.putInt((int)gameObject.getLocation().x);
-				buffer.putInt((int)gameObject.getLocation().y);
+				buffer.putInt((int)gameObject.getLocation().getX());
+				buffer.putInt((int)gameObject.getLocation().getY());
 				
 				buffer.flip();
 				
@@ -181,6 +182,13 @@ public class ServerGameState implements ClientListener, Runnable
 	{
 		Client client = new Client();
 		clientManager.addClient(client);
+		
+		int id = 0;
+		GameObject object = new GameObject(id);
+		client.sendMessage(new Message((byte)-1, ByteConverter.IntToByteArray(id), client));
+		
+		clientManager.addClient(client);
+		clientObjectMap.put(client, object);
 		return client;
 	}
 

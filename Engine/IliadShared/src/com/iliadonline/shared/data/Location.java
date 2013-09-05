@@ -8,14 +8,14 @@ package com.iliadonline.shared.data;
  */
 public class Location
 {
-	//Maps held with location, Maps containing game objects is for performance not data consistency - CL
-	public int map;
+	//Maps held with location
+	protected int map;
 	
 	/**
 	 * X, Y are Float because of the need to track change over small periods of time.
 	 * Float to Int conversion will drop decimal data, items may never move in a positive direction
 	 */
-	public float x, y;
+	protected float x, y;
 	
 	public Location()
 	{
@@ -29,35 +29,44 @@ public class Location
 		this.y = y;
 	}
 	
-	/**
-	 * Creates a new Location as a Translation of the Subject from the Origin
-	 * Map will be set to that of the subject
-	 * @param origin
-	 * @param subject
-	 */
-	public Location(Location origin, Location subject)
+	public int getMap()
 	{
-		//We may not care about different maps, left the code here in case we do
-		/*if(this.map != other.map)
-		{
-			throw new IllegalArgumentException("Locations must be on the same Map");
-		}*/
-		
-		this.map = subject.map;
-		this.x = subject.x - origin.x;
-		this.y = subject.y - origin.y;
+		return map;
+	}
+
+	public void setMap(int map)
+	{
+		this.map = map;
+	}
+
+	public float getX()
+	{
+		return x;
+	}
+
+	public void setX(float x)
+	{
+		this.x = x;
 	}
 	
-	/**
-	 * TODO: a hold over of not having Matrix translations on our rendering
-	 * Sets the X,Y data for this location based on the subject's relative position to the center
-	 * @param center
-	 * @param subject
-	 */
-	public void setRelativeLocation(Location center, Location subject)
+	public void incrementX(float shift)
 	{
-		this.x = (subject.x - center.x);		
-		this.y = (subject.y - center.y);
+		this.x += shift;
+	}
+
+	public float getY()
+	{
+		return y;
+	}
+
+	public void setY(float y)
+	{
+		this.y = y;
+	}
+	
+	public void incrementY(float shift)
+	{
+		this.y += shift;
 	}
 
 	/**
@@ -66,7 +75,6 @@ public class Location
 	@Override
 	public String toString()
 	{
-		//TODO: Use String Builder? 
 		String str = "[" + this.x + ", " + this.y + "]";
 		return str;
 	}

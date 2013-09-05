@@ -130,8 +130,8 @@ public class GameState
 			ByteBuffer buff = ByteBuffer.allocate(Integer.SIZE + Float.SIZE + Float.SIZE);
 			
 			buff.putInt(this.player.getId());
-			buff.putFloat(this.player.getLocation().x);
-			buff.putFloat(this.player.getLocation().y);
+			buff.putFloat(this.player.getLocation().getX());
+			buff.putFloat(this.player.getLocation().getY());
 			
 			Message msg = new Message((byte)1, buff.array(), null);
 			
@@ -212,7 +212,7 @@ public class GameState
 					float x, y;
 					
 					x = controller.getAxis(Ouya.AXIS_LEFT_X);
-					y = controller.getAxis(Ouya.AXIS_LEFT_Y);
+					y = -controller.getAxis(Ouya.AXIS_LEFT_Y);
 					
 					if(controller.getButton(Ouya.BUTTON_L1));
 					{
@@ -223,15 +223,16 @@ public class GameState
 					
 					if(Math.abs(x) > epsilon)
 					{
-						player.getLocation().x += shift * x;
+						player.getLocation().incrementX(shift * x);
 					}
 					
 					if(Math.abs(y) > epsilon)
 					{
-						player.getLocation().y -= shift * y;
+						player.getLocation().incrementY(shift * y);
 					}
 					
-					Gdx.app.log(tag, String.valueOf(x));
+					Gdx.app.log(tag, "X: " + String.valueOf(x));
+					Gdx.app.log(tag, "Y: " + String.valueOf(y));
 				}
 				break;
 			case Paused:
@@ -269,21 +270,21 @@ public class GameState
 					
 					if(Gdx.input.isKeyPressed(Keys.UP))
 					{
-						player.getLocation().y += shift;
+						player.getLocation().incrementY(shift);
 					}
 					if(Gdx.input.isKeyPressed(Keys.DOWN))
 					{
-						player.getLocation().y -= shift;
+						player.getLocation().incrementY(-shift);
 					}
 					
 					if(Gdx.input.isKeyPressed(Keys.LEFT))
 					{
-						player.getLocation().x -= shift;
+						player.getLocation().incrementX(-shift);
 					}
 					
 					if(Gdx.input.isKeyPressed(Keys.RIGHT))
 					{	
-						player.getLocation().x += shift;
+						player.getLocation().incrementX(shift);
 					}
 				}
 				break;
@@ -307,13 +308,13 @@ public class GameState
 			if(!this.currentMap.getGameObjects().containsKey(id))
 			{
 				GameObject gameObj = new GameObject(id);
-				gameObj.getLocation().map = 1;
+				gameObj.getLocation().setMap(1);
 				
 				this.currentMap.getGameObjects().put(id, gameObj);
 			}
 			
-			this.currentMap.getGameObjects().get(id).getLocation().x = x;
-			this.currentMap.getGameObjects().get(id).getLocation().y = y;
+			this.currentMap.getGameObjects().get(id).getLocation().setX(x);
+			this.currentMap.getGameObjects().get(id).getLocation().setY(y);
 		}
 	}
 	
