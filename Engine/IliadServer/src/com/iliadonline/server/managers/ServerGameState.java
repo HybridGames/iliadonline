@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.SocketChannel;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -88,7 +89,15 @@ public class ServerGameState implements ClientListener, Runnable
 		{
 			dbDir.mkdirs();
 		}
-		this.data = new HsqlDataProvider(dbDir.file());
+		try
+		{
+			this.data = new HsqlDataProvider(dbDir.file(), false);
+		}
+		catch (SQLException e)
+		{
+			//TODO: Fail to start server with some message
+			e.printStackTrace();
+		}
 	}
 	
 	/**

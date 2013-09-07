@@ -15,12 +15,8 @@ public class HsqlDataProvider implements DataInterface
 	private static final String tag = "com.iliadonline.server.data.HsqlDataProvider";
 	
 	protected Connection connection;
-	
-	/**
-	 * Creates a persistent database at the folder provided
-	 * @param location
-	 */
-	public HsqlDataProvider(File location)
+		
+	public HsqlDataProvider(File location, boolean initialize) throws SQLException
 	{
 		 try {
 		     Class.forName("org.hsqldb.jdbc.JDBCDriver");
@@ -37,23 +33,32 @@ public class HsqlDataProvider implements DataInterface
 		
 		try
 		{
-			Gdx.app.log(tag, "DB Directory: " + location.getAbsolutePath());
-			this.connection = DriverManager.getConnection("jdbc:hsqldb:file:" + location.getAbsolutePath(), "SA", "");
+			String create = "create=" + ((initialize)?"true":"false");
+			//Gdx.app.log(tag, "DB Directory: " + location.getAbsolutePath());
+			this.connection = DriverManager.getConnection("jdbc:hsqldb:file:" + location.getAbsolutePath() + ";" + create, "SA", "");
 		}
 		catch (SQLException e)
 		{
-			//TODO: Log and Report DB Failure
-			e.printStackTrace();
+			throw e;
 		}
 	}
 	
 	/**
+	 * Creates a persistent database at the folder provided
+	 * @param location
+	 */
+	public HsqlDataProvider(File location) throws SQLException
+	{
+		this(location, true);
+	}
+
+	/**
 	 * Creates an in memory database (non-persistent)
 	 */
-	public HsqlDataProvider()
+	/*public HsqlDataProvider()
 	{
 		
-	}
+	}*/
 
 	@Override
 	public List<IliadMap> loadMaps()
