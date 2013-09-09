@@ -18,7 +18,7 @@ public class HsqlDataProviderTest
 	private static final String testPath = "C:\\Work\\test\\iliad\\server\\data";
 
 	@Test
-	public void testCreateFalseException() throws SQLException
+	public void testCreateFalseException() throws SQLException, Exception
 	{
 		File location = new File(testPath + "\\invalid");
 		location.mkdirs();

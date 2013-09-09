@@ -1,10 +1,17 @@
 package com.iliadonline.server.data;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.channels.SelectableChannel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
+
+import org.hsqldb.cmdline.SqlFile;
+import org.hsqldb.cmdline.SqlToolError;
 
 import com.badlogic.gdx.Gdx;
 import com.iliadonline.server.objects.GameObject;
@@ -16,14 +23,19 @@ public class HsqlDataProvider implements DataInterface
 	
 	protected Connection connection;
 		
-	public HsqlDataProvider(File location, boolean initialize) throws SQLException
+	/**
+	 * Creates a HsqlDataProvider with a Connection to the database at the given location.
+	 * @param location
+	 * @param create Should this Database be Created if it does not already exist
+	 * @throws SQLException
+	 */
+	public HsqlDataProvider(File location, boolean create) throws SQLException, URISyntaxException, Exception
 	{
 		 try {
 		     Class.forName("org.hsqldb.jdbc.JDBCDriver");
 		 } catch (Exception e) {
 		     System.err.println("ERROR: failed to load HSQLDB JDBC driver.");
-		     e.printStackTrace();
-		     return;
+		     throw e;
 		 }
 		
 		if(!location.isDirectory())
@@ -33,13 +45,17 @@ public class HsqlDataProvider implements DataInterface
 		
 		try
 		{
-			String create = "create=" + ((initialize)?"true":"false");
-			//Gdx.app.log(tag, "DB Directory: " + location.getAbsolutePath());
-			this.connection = DriverManager.getConnection("jdbc:hsqldb:file:" + location.getAbsolutePath() + ";" + create, "SA", "");
+			String createStr = "create=" + ((create)?"true":"false");
+			this.connection = DriverManager.getConnection("jdbc:hsqldb:file:" + location.getAbsolutePath() + ";" + createStr, "SA", "");
 		}
 		catch (SQLException e)
 		{
 			throw e;
+		}
+		
+		if(create)
+		{
+			this.initializeDatabase();
 		}
 	}
 	
@@ -47,7 +63,7 @@ public class HsqlDataProvider implements DataInterface
 	 * Creates a persistent database at the folder provided
 	 * @param location
 	 */
-	public HsqlDataProvider(File location) throws SQLException
+	public HsqlDataProvider(File location) throws SQLException, Exception
 	{
 		this(location, true);
 	}
@@ -60,6 +76,25 @@ public class HsqlDataProvider implements DataInterface
 		
 	}*/
 
+	/**
+	 * Responsible for creating the default database.
+	 * Opted to include all of the throws separately so we know what potential issues we need to respond to.
+	 * At this point, it's expected that any of these problems may be unrecoverable,
+	 * so knowing what is wrong and reporting specific issues is important.
+	 * @throws URISyntaxException 
+	 * @throws IOException 
+	 * @throws SQLException 
+	 * @throws SqlToolError 
+	 */
+	protected void initializeDatabase() throws URISyntaxException, IOException, SqlToolError, SQLException
+	{
+		File file = new File(HsqlDataProvider.class.getResource("/com/iliadonline/server/sql/init/create_tables.sql").toURI());
+		SqlFile sqlFile = new SqlFile(file);
+		
+		sqlFile.setConnection(this.connection);
+		sqlFile.execute();
+	}
+	
 	@Override
 	public List<IliadMap> loadMaps()
 	{
@@ -114,6 +149,14 @@ public class HsqlDataProvider implements DataInterface
 	{
 
 
+	}
+
+	@Override
+	protected void finalize() throws Throwable
+	{
+		//TODO: Do we need to issue a SHUTDOWN command?
+		this.connection.close();
+		super.finalize();
 	}
 
 }

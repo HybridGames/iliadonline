@@ -91,11 +91,16 @@ public class ServerGameState implements ClientListener, Runnable
 		}
 		try
 		{
-			this.data = new HsqlDataProvider(dbDir.file(), false);
+			this.data = new HsqlDataProvider(dbDir.file(), true);
 		}
 		catch (SQLException e)
 		{
 			//TODO: Fail to start server with some message
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			//TODO: most likely the Hsql Driver failed
 			e.printStackTrace();
 		}
 	}

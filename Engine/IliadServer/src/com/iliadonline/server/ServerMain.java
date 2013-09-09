@@ -127,7 +127,7 @@ public class ServerMain
 	{
 		if (args.length <= 0)
 		{
-			throw new IllegalArgumentException("arg[0] must be a direcotry.");
+			throw new IllegalArgumentException("arg[0] not provided, must be a direcotry.");
 		}
 
 		File serverDir = new File(args[0]);
