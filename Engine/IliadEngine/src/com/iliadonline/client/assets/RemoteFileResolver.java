@@ -41,7 +41,7 @@ public class RemoteFileResolver implements FileHandleResolver
 	public FileHandle resolve(String fileName)
 	{
 		//TODO: Need some way to clean the added file information, it's giving a fully qualified path
-		Gdx.app.log(tag, "FileName: " + fileName);
+		Gdx.app.debug(tag, "FileName: " + fileName);
 		
 		String pathMask = dataDir.file().getAbsolutePath();
 		String newChild = fileName.replace(pathMask, "");
@@ -55,7 +55,7 @@ public class RemoteFileResolver implements FileHandleResolver
 			RemoteFileHandle remoteFile;
 			try
 			{
-				newChild = newChild.replaceFirst("/", "");
+				//newChild = newChild.replaceFirst("/", "");
 				Gdx.app.log(tag, "http://hybridgames.net/iliad/assets/" + newChild);
 				remoteFile = new RemoteFileHandle("http://hybridgames.net/iliad/assets/" + newChild);
 				return remoteFile;
