@@ -8,7 +8,7 @@
 	<classpathentry kind="lib" path="/IliadShared/libs/org-json.jar"/>
 	<classpathentry kind="lib" path="/IliadEngine/libs/gdx.jar" sourcepath="/IliadEngine/libs/gdx-sources.jar"/>
 	<classpathentry kind="lib" path="libs/sqltool.jar"/>
-	<classpathentry kind="lib" path="libs/hsqldb.jar"/>
+	<classpathentry exported="true" kind="lib" path="libs/hsqldb.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

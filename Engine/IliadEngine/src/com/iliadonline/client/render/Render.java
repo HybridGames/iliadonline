@@ -94,8 +94,6 @@ public class Render
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		
-		
-		
 		if(state.getState() == GameStateEnum.Authenticated)
 		{
 			batch.begin();
