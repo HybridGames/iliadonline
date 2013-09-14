@@ -41,12 +41,12 @@ public class Hud
 			return;
 		}
 		
-		/*font = this.assetManager.get("gfx/fonts/arial32.fnt", BitmapFont.class);
+		font = this.assetManager.get("gfx/fonts/arial32.fnt", BitmapFont.class);
 		LabelStyle style = new LabelStyle(font, Color.WHITE);
 		gameVersion = new Label(versionStr, style);
 		
 		stage.addActor(gameVersion);
-		stage.draw();*/
+		stage.draw();
 		
 		//Get Renderable Elements from GameState
 		stateStr = state.getState().name();
