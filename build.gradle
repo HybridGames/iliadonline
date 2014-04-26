@@ -65,6 +65,14 @@ project(":android") {
     }
 }
 
+project(":server") {
+	apply plugin: "java"
+	
+	dependencies {
+        compile project(":core")
+	}
+}
+
 project(":core") {
     apply plugin: "java"
 
@@ -77,9 +85,7 @@ project(":core") {
     }
 }
 
-project(":server") {
-	apply plugin: "java"
-}
+
 
 tasks.eclipse.doLast {
     delete ".project"
