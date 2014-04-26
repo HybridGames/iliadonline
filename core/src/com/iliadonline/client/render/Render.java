@@ -6,7 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -92,7 +92,7 @@ public class Render
 		
 		//Clear the buffer
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		if(state.getState() == GameStateEnum.Authenticated)
 		{
@@ -101,7 +101,9 @@ public class Render
 			Location location = state.getPlayer().getLocation();
 			camera.position.set(location.getX(), location.getY(), 0);
 			camera.update();
-			camera.apply(Gdx.graphics.getGL11());
+			
+			//@todo don't know if we still need this.
+			//camera.apply(Gdx.graphics.getGL20());
 		
 			int x = (int)(location.getX());
 			int y = (int)(location.getY());

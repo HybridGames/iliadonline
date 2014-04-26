@@ -17,6 +17,9 @@ allprojects {
         appName = 'Iliad'
         gdxVersion = '1.0.0'
         roboVMVersion = '0.0.11'
+        orgJsonVersion = '20140107'
+        hsqldbVersion = '2.3.2'
+        sqlToolVersion = '2.3.2'
     }
 
     repositories {
@@ -65,19 +68,12 @@ project(":android") {
     }
 }
 
-project(":server") {
-	apply plugin: "java"
-	
-	dependencies {
-        compile project(":core")
-	}
-}
-
 project(":core") {
     apply plugin: "java"
 
 
     dependencies {
+    	compile project(":server")
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
@@ -85,7 +81,17 @@ project(":core") {
     }
 }
 
-
+project(":server") {
+	apply plugin: "java"
+	
+	dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile "org.json:json:$orgJsonVersion"
+        compile "org.hsqldb:hsqldb:$hsqldbVersion"
+        compile "org.hsqldb:sqltool:$sqlToolVersion"
+	}
+}
 
 tasks.eclipse.doLast {
     delete ".project"
