@@ -3,8 +3,6 @@ package com.iliadonline.client;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
-import tv.ouya.console.api.OuyaFacade;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
@@ -165,6 +163,8 @@ public class GameState
 	 */
 	public void processInput()
 	{
+		/*
+		 * @todo need better way to process input
 		if(OuyaFacade.getInstance().isRunningOnOUYAHardware())
 		{
 			processInputOuya();
@@ -172,7 +172,7 @@ public class GameState
 		else
 		{
 			processInputPC();
-		}
+		}*/
 	}
 	
 	/**
