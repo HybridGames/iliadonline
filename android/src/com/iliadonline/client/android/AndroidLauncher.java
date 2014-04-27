@@ -9,28 +9,12 @@ import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.iliadonline.client.IliadClient;
 
-public class AndroidLauncher extends AndroidApplication {
+public class AndroidLauncher extends AndroidApplication
+{
 	@Override
-	protected void onCreate (Bundle savedInstanceState) {
-		
-		CancelIgnoringOuyaResponseListener<GamerInfo> gamerInfoListener = new CancelIgnoringOuyaResponseListener<GamerInfo>()
-		{
-			@Override
-			public void onSuccess(GamerInfo result)
-			{
-				
-			}
+	protected void onCreate(Bundle savedInstanceState)
+	{
 
-			@Override
-			public void onFailure(int errorCode, String errorMessage,
-					Bundle errorBundle)
-			{
-				
-			}
-		};
-		
-		OuyaFacade.getInstance().requestGamerInfo(gamerInfoListener);
-		
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		initialize(new IliadClient(), config);
