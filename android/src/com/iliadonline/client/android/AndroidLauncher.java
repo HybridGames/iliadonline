@@ -16,7 +16,7 @@ public class AndroidLauncher extends AndroidApplication implements OuyaResponseL
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		OuyaFacade.getInstance().init(this, "00000000-0000-0000-0000-000000000000");
+		OuyaFacade.getInstance().init(this, "a82d33ec-3e86-4afd-ade4-c23c56c023b5");
 		
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
