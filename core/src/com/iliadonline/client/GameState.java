@@ -11,6 +11,7 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.network.LocalServer;
+import com.iliadonline.client.network.RemoteServer;
 import com.iliadonline.client.network.ServerInterface;
 import com.iliadonline.shared.components.RenderComponent;
 import com.iliadonline.shared.data.GameObject;
@@ -152,7 +153,12 @@ public class GameState
 		{
 			this.server = new LocalServer(this.dataDir);
 			this.server.connect();
-		}	
+		}
+		else
+		{
+			this.server = new RemoteServer(5679);
+			this.server.connect();
+		}
 		
 		this.state = GameStateEnum.Connected;
 	}

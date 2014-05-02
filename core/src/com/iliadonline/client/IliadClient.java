@@ -1,5 +1,6 @@
 package com.iliadonline.client;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -49,6 +50,8 @@ public class IliadClient implements ApplicationListener
 	@Override
 	public void create() 
 	{		
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+		
 		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
 		FileHandle dataDir;
@@ -78,7 +81,7 @@ public class IliadClient implements ApplicationListener
 		
 		Controllers.addListener(new IliadController());
 		
-		//gameState.connect(true);
+		gameState.connect(false);
 	}
 	
 	/**
