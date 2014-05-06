@@ -45,14 +45,6 @@ public class Network implements Runnable {
 	{
 		this.port = port;
 		
-		//TODO: move server connection into run()
-		//Configure our server socket
-		server.configureBlocking(false);
-		server.socket().bind(new InetSocketAddress(this.port));
-		server.register(serverSelector, SelectionKey.OP_ACCEPT);
-		
-		logger.info("Network bound to port " + port);
-		
 		//Assign the in queue
 		this.incomingQueue = new ConcurrentLinkedQueue<Message>();
 		
@@ -94,6 +86,8 @@ public class Network implements Runnable {
 		server.configureBlocking(false);
 		server.socket().bind(new InetSocketAddress(this.port));
 		server.register(serverSelector, SelectionKey.OP_ACCEPT);
+
+		logger.info("Network bound to port " + port);
 	}
 	
 	/**

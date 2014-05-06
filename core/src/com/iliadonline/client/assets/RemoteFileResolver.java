@@ -43,7 +43,9 @@ public class RemoteFileResolver implements FileHandleResolver
 		//TODO: Need some way to clean the added file information, it's giving a fully qualified path
 		Gdx.app.debug(tag, "FileName: " + fileName);
 		
-		String pathMask = dataDir.file().getAbsolutePath();
+		//String pathMask = dataDir.file().getAbsolutePath();
+		//String pathMask = dataDir.file().getPath();
+		String pathMask = "./bin/data/";
 		String newChild = fileName.replace(pathMask, "");
 		
 		Gdx.app.log(tag, "pathMask: " + pathMask);

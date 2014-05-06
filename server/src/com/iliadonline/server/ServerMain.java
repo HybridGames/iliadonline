@@ -61,7 +61,7 @@ public class ServerMain
 			e.printStackTrace();
 		}
 
-		serverState.setIncomingQueue(network.getIncomingQueue());
+		//serverState.setIncomingQueue(network.getIncomingQueue());
 		
 		new Thread(serverState).start();
 		new Thread(network).start();
