@@ -68,7 +68,7 @@ public class ServerGameState implements ClientListener, Runnable
 		//Load Data
 		//Initialize GameState
 		FileHandle dbDir = dataDir.child("db/db");
-		this.connectDatabase(dbDir);
+		//this.connectDatabase(dbDir);
 		
 		uuid = new UUID(Integer.MIN_VALUE);
 	}

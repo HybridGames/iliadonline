@@ -26,25 +26,14 @@ public class IliadClient implements ApplicationListener
 	private long lastFrame = 0, currentFrame = 0;
 	private float fps = 0.0f;
 	
-	protected boolean isOuya = false;
-	
 	protected AssetManager assetManager;
 	
 	/**
-	 * Prefer a constructor that determines if we're playing on Ouya or not
-	 * @param isOuya boolean
-	 */
-	public IliadClient(boolean isOuya)
-	{
-		this.isOuya = isOuya;
-	}
-	
-	/**
-	 * Default constructor to help with any libGdx automated code
+	 * 
 	 */
 	public IliadClient()
 	{
-		this(false);
+		//Gdx.app.log(tag, "IliadClient Constructed");
 	}
 	
 	@Override
