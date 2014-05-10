@@ -38,7 +38,7 @@ public class ClientNetwork implements Runnable
 			socket = SocketChannel.open();
 			socket.configureBlocking(false);
 			//socket.connect(new InetSocketAddress("hybridgames.gotdns.com", 6789));
-			socket.connect(new InetSocketAddress("192.168.1.155", 5678));
+			socket.connect(new InetSocketAddress("192.168.1.4", 5678));
 			
 			Gdx.app.debug(tag, "Waiting to Connect");
 			while(!socket.finishConnect())
