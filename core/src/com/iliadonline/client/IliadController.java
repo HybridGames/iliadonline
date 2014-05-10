@@ -48,7 +48,6 @@ public class IliadController extends ControllerAdapter
 	@Override
 	public boolean axisMoved(Controller controller, int axisIndex, float value)
 	{
-		// TODO Auto-generated method stub
 		return super.axisMoved(controller, axisIndex, value);
 	}
 
@@ -58,7 +57,6 @@ public class IliadController extends ControllerAdapter
 	@Override
 	public void connected(Controller controller)
 	{
-		// TODO Auto-generated method stub
 		super.connected(controller);
 	}
 
@@ -68,7 +66,6 @@ public class IliadController extends ControllerAdapter
 	@Override
 	public void disconnected(Controller controller)
 	{
-		// TODO Auto-generated method stub
 		super.disconnected(controller);
 	}
 }

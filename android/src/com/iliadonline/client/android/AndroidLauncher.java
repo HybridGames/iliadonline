@@ -10,6 +10,7 @@ import tv.ouya.console.api.OuyaResponseListener;
 import android.os.Bundle;
 import android.util.SparseArray;
 
+import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -25,14 +26,21 @@ public class AndroidLauncher extends AndroidApplication implements OuyaResponseL
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
-	{
-		OuyaFacade.getInstance().init(this, "a82d33ec-3e86-4afd-ade4-c23c56c023b5");
-		
+	{		
 		super.onCreate(savedInstanceState);
+		
+		//Configure Android Application
+		OuyaFacade.getInstance().init(this, "a82d33ec-3e86-4afd-ade4-c23c56c023b5");
+		OuyaFacade.getInstance().requestGamerInfo(this);
+		
+		OuyaController.init(this);
+		OuyaController.showCursor(false);
+		
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
 		config.useCompass = false;
-		
+				
+		//Setup Controller Mappings
 		Map<Integer, ControllerActionEnum> buttonMapping = new HashMap<Integer, ControllerActionEnum>();
 		buttonMapping.put(OuyaController.BUTTON_MENU, ControllerActionEnum.MENU);
 		
@@ -41,16 +49,11 @@ public class AndroidLauncher extends AndroidApplication implements OuyaResponseL
 		buttonMapping.put(OuyaController.AXIS_LS_Y, ControllerActionEnum.MOVE_Y);
 		
 		IliadController controller = new IliadController(buttonMapping, axisMapping);
+				
+		ClientConfig clientConfig = new AndroidClientConfig();
 		
-		FileHandle dataDir = this.initializeOuyaDirectories();
-		ClientConfig clientConfig = new ClientConfig(dataDir, dataDir);
 		IliadClient client = new IliadClient(clientConfig, controller);
 		initialize(client, config);
-		
-		OuyaFacade.getInstance().requestGamerInfo(this);
-		
-		OuyaController.init(this);
-		OuyaController.showCursor(false);
 	}
 
 	@Override
@@ -76,38 +79,5 @@ public class AndroidLauncher extends AndroidApplication implements OuyaResponseL
 	public void onSuccess(GamerInfo gamerInfo)
 	{
 		Gdx.app.log("User Name", gamerInfo.getUsername());
-	}
-	
-	/**
-	 * Creates all the local directories that we require if they are missing.
-	 * We may need something like this for desktop, but focus is on Ouya right now.
-	 * @return
-	 */
-	protected FileHandle initializeOuyaDirectories()
-	{
-		FileHandle dataDir = Gdx.files.local("data");
-				
-		FileHandle gfxDir = dataDir.child("gfx");
-		if(!gfxDir.isDirectory())
-		{
-			//mkdirs will make all directories, so this includes the "data" dir
-			gfxDir.mkdirs();
-		}
-		
-		FileHandle spritesDir = gfxDir.child("sprites");
-		if(!spritesDir.isDirectory())
-		{
-			spritesDir.mkdirs();
-		}
-		
-		FileHandle fontsDir = gfxDir.child("fonts");
-		if(!fontsDir.isDirectory())
-		{
-			fontsDir.mkdirs();
-		}
-		
-		Gdx.app.log(tag, "Data Dir: " + dataDir.path());
-		
-		return dataDir;
 	}
 }

@@ -46,11 +46,11 @@ public class IliadClient implements ApplicationListener
 		
 		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir = this.config.writableAssetFolder;
+		FileHandle dataDir = this.config.getWritableAssetFolder();
 		
-		assetManager = new AssetManager(new RemoteFileResolver(dataDir));
+		//assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
-		render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
 		gameState = new GameState(dataDir);
@@ -92,7 +92,7 @@ public class IliadClient implements ApplicationListener
 		this.gameState.processInput();
 		this.gameState.update();
 		
-		this.render.render(gameState);
+		//this.render.render(gameState);
 		
 		//Simple FPS calculations
 		currentFrame = System.nanoTime();
@@ -103,7 +103,7 @@ public class IliadClient implements ApplicationListener
 
 	@Override
 	public void resize(int width, int height) {
-		render.resize(width, height);
+		//render.resize(width, height);
 	}
 
 	@Override
