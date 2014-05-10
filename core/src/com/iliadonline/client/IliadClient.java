@@ -19,7 +19,10 @@ import com.iliadonline.client.render.Render;
 public class IliadClient implements ApplicationListener 
 {
 	private static final String tag = "com.iliadonline.client.IliadClient";
-		
+	
+	protected ClientConfig config;
+	protected IliadController controller;
+	
 	protected Render render;
 	protected GameState gameState;
 	
@@ -29,11 +32,11 @@ public class IliadClient implements ApplicationListener
 	protected AssetManager assetManager;
 	
 	/**
-	 * 
+	 * @param config
 	 */
-	public IliadClient()
+	public IliadClient(ClientConfig config, IliadController controller)
 	{
-		//Gdx.app.log(tag, "IliadClient Constructed");
+		this.config = config;
 	}
 	
 	@Override
@@ -43,32 +46,16 @@ public class IliadClient implements ApplicationListener
 		
 		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir;
-		if(Gdx.app.getType() == ApplicationType.Android)
-		{
-			//Initialize out local directories
-			dataDir = initializeOuyaDirectories();
-			
-			//dataDir = Gdx.files.internal("data");
-		}
-		else
-		{
-			//TODO: Check this assessment
-			//Internal on a desktop is roughly the same as Local
-			dataDir = Gdx.files.internal("./bin/data/");
-		}
+		FileHandle dataDir = this.config.writableAssetFolder;
 		
 		assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
-		FileHandle gfxDir;
-		gfxDir = dataDir.child("gfx");
-		//render = new Render(gfxDir, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
 		gameState = new GameState(dataDir);
 		
-		Controllers.addListener(new IliadController());
+		Controllers.addListener(controller);
 		
 		gameState.connect(false);
 	}
@@ -125,38 +112,5 @@ public class IliadClient implements ApplicationListener
 
 	@Override
 	public void resume() {
-	}
-	
-	/**
-	 * Creates all the local directories that we require if they are missing.
-	 * We may need something like this for desktop, but focus is on Ouya right now.
-	 * @return
-	 */
-	protected FileHandle initializeOuyaDirectories()
-	{
-		FileHandle dataDir = Gdx.files.local("data");
-				
-		FileHandle gfxDir = dataDir.child("gfx");
-		if(!gfxDir.isDirectory())
-		{
-			//mkdirs will make all directories, so this includes the "data" dir
-			gfxDir.mkdirs();
-		}
-		
-		FileHandle spritesDir = gfxDir.child("sprites");
-		if(!spritesDir.isDirectory())
-		{
-			spritesDir.mkdirs();
-		}
-		
-		FileHandle fontsDir = gfxDir.child("fonts");
-		if(!fontsDir.isDirectory())
-		{
-			fontsDir.mkdirs();
-		}
-		
-		Gdx.app.log(tag, "Data Dir: " + dataDir.path());
-		
-		return dataDir;
-	}
+	}	
 }
