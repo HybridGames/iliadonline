@@ -133,7 +133,7 @@ public class ServerGameState implements ClientListener, Runnable
 		message = incoming.poll();
 		Client client = message.client;
 		
-		Gdx.app.log(tag, "Message Received: " + message.toString());
+		//Gdx.app.log(tag, "Message Received: " + message.toString());
 				
 		//TODO: Look into a strategy pattern or perhaps event system to clean this up long term
 		switch(message.command)

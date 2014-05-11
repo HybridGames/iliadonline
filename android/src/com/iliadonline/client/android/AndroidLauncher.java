@@ -35,7 +35,7 @@ public class AndroidLauncher extends AndroidApplication implements OuyaResponseL
 		
 		OuyaController.init(this);
 		OuyaController.showCursor(false);
-		
+
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.useAccelerometer = false;
 		config.useCompass = false;

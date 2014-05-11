@@ -67,7 +67,7 @@ public class ClientNetwork implements Runnable
 			{
 				try {
 					msg = out.poll();
-					Gdx.app.log(tag, "Message Being Written: " + msg);
+					//Gdx.app.log(tag, "Message Being Written: " + msg);
 					socket.write(Protocol.createBuffer(msg));
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

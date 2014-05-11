@@ -57,7 +57,7 @@ public class IliadClient implements ApplicationListener
 		
 		Controllers.addListener(controller);
 		
-		gameState.connect(false);
+		gameState.connect(true);
 	}
 	
 	/**
