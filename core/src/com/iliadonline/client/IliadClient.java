@@ -40,6 +40,7 @@ public class IliadClient implements ApplicationListener
 	public IliadClient(ClientConfig config, IliadController controller)
 	{
 		this.config = config;
+		this.controller = controller;
 	}
 	
 	@Override
