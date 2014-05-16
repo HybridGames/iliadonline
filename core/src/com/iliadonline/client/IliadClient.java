@@ -4,8 +4,11 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.assets.RemoteFileResolver;
 import com.iliadonline.client.render.Render;
@@ -56,6 +59,11 @@ public class IliadClient implements ApplicationListener
 		gameState = new GameState(dataDir);
 		
 		Controllers.addListener(controller);
+		
+		for(Controller c : Controllers.getControllers())
+		{
+			c.addListener(controller);
+		}
 		
 		gameState.connect(true);
 	}
