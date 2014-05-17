@@ -12,6 +12,7 @@ import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.assets.RemoteFileResolver;
 import com.iliadonline.client.render.Render;
+import com.iliadonline.client.stats.Stats;
 
 /**
  * This is our main Application class in the LibGDX setup.
@@ -29,8 +30,7 @@ public class IliadClient implements ApplicationListener
 	protected Render render;
 	protected GameState gameState;
 	
-	private long lastFrame = 0, currentFrame = 0;
-	private float fps = 0.0f;
+	protected Stats stats;
 	
 	protected AssetManager assetManager;
 	
@@ -45,10 +45,11 @@ public class IliadClient implements ApplicationListener
 	
 	@Override
 	public void create() 
-	{		
+	{
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+		this.stats = new Stats();
 		
-		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
 		//FileHandle dataDir = this.config.getWritableAssetFolder();
 		
@@ -87,6 +88,7 @@ public class IliadClient implements ApplicationListener
 	@Override
 	public void render() 
 	{
+		this.stats.beginRender();
 		
 		//TODO: Fixed time step on processing messages
 		//Is it beneficial to move ProcessMessage and Update to fixed time steps, so they aren't run every loop?
@@ -98,11 +100,7 @@ public class IliadClient implements ApplicationListener
 		
 		//this.render.render(gameState);
 		
-		//Simple FPS calculations
-		currentFrame = System.nanoTime();
-		fps = 1000000000f / (currentFrame - lastFrame);
-		lastFrame = currentFrame;
-		//Gdx.app.log(tag, "FPS: " + fps);
+		this.stats.endRender();
 	}
 
 	@Override
