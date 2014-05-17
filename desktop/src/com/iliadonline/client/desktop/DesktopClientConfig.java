@@ -21,4 +21,16 @@ public class DesktopClientConfig implements ClientConfig
 		return dataDir;
 	}
 
+	@Override
+	public String getRemoteAddress()
+	{
+		return "127.0.0.1";
+	}
+
+	@Override
+	public int getRemotePort()
+	{
+		return 5678;
+	}
+
 }

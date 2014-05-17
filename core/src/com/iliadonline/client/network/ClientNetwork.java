@@ -16,6 +16,10 @@ import com.iliadonline.shared.network.Protocol;
 public class ClientNetwork implements Runnable 
 {
 	private static final String tag = "com.iliadonline.client.network.ClientNetwork";
+	
+	protected String address;
+	protected int port;
+	
 	protected boolean running = false;
 	protected ConcurrentLinkedQueue<Message> in, out;
 	
@@ -24,8 +28,11 @@ public class ClientNetwork implements Runnable
 	
 	Message msg;
 	
-	public ClientNetwork()
+	public ClientNetwork(String address, int port)
 	{
+		this.address = address;
+		this.port = port;
+		
 		in = new ConcurrentLinkedQueue<Message>();
 		out = new ConcurrentLinkedQueue<Message>();
 	}
@@ -37,8 +44,7 @@ public class ClientNetwork implements Runnable
 		try {
 			socket = SocketChannel.open();
 			socket.configureBlocking(false);
-			//socket.connect(new InetSocketAddress("hybridgames.gotdns.com", 6789));
-			socket.connect(new InetSocketAddress("192.168.1.4", 5678));
+			socket.connect(new InetSocketAddress(this.address, this.port));
 			
 			Gdx.app.debug(tag, "Waiting to Connect");
 			while(!socket.finishConnect())

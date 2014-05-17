@@ -7,6 +7,9 @@ import com.badlogic.gdx.files.FileHandle;
  */
 public interface ClientConfig
 {
+	public String getRemoteAddress();
+	public int getRemotePort();
+	
 	public FileHandle getStaticAssetFolder();
-	public FileHandle getWritableAssetFolder();	
+	public FileHandle getWritableAssetFolder();
 }

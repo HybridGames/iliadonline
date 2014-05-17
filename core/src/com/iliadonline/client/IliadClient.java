@@ -50,21 +50,16 @@ public class IliadClient implements ApplicationListener
 		
 		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir = this.config.getWritableAssetFolder();
+		//FileHandle dataDir = this.config.getWritableAssetFolder();
 		
 		//assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
-		gameState = new GameState(dataDir);
+		gameState = new GameState(this.config);
 		
 		Controllers.addListener(controller);
-		
-		for(Controller c : Controllers.getControllers())
-		{
-			c.addListener(controller);
-		}
 		
 		gameState.connect(true);
 	}
