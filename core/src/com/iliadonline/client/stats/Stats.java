@@ -11,6 +11,7 @@ public class Stats
 	protected long lastFrame = 0, currentFrame = 0;
 	protected float fps = 0.0f;
 	
+	protected long now;
 	
 	/**
 	 * Called at the beginning of a Rendering pass to establish beginning times
@@ -25,11 +26,31 @@ public class Stats
 	 */
 	public void endRender()
 	{
-		averageFrame = ((averageFrame * frameCount) + (System.nanoTime() - startTime)) / ++frameCount;
+		now = System.nanoTime();
 		
-		fps = 1000000000f / averageFrame;
+		//Average time for each rendering frame
+		averageFrame = ((averageFrame * frameCount) + (now - startTime)) / ++frameCount;
 		
-		Gdx.app.log("Stats", "Average Frame: " + averageFrame);
-		Gdx.app.log("Stats", "FPS: " + fps);
-	}	
+		//Actual time between the end of each frame
+		fps = 1000000000f / (now - lastFrame);
+		lastFrame = now;
+	}
+	
+	/**
+	 * The current FPS
+	 * @return float
+	 */
+	public float getFps()
+	{
+		return this.fps;
+	}
+	
+	/**
+	 * The average length of a rendering frame
+	 * @return float
+	 */
+	public float getAverageFrame()
+	{
+		return (averageFrame / 1000000000f);
+	}
 }

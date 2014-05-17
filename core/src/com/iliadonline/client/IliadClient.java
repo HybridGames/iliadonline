@@ -101,6 +101,8 @@ public class IliadClient implements ApplicationListener
 		//this.render.render(gameState);
 		
 		this.stats.endRender();
+		Gdx.app.log("Stats", "FPS: " + this.stats.getFps());
+		Gdx.app.log("Stats", "Average Frame: " + this.stats.getAverageFrame());
 	}
 
 	@Override
