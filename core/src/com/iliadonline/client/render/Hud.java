@@ -8,8 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.iliadonline.client.GameState;
-import com.iliadonline.client.GameState.GameStateEnum;
+import com.iliadonline.client.state.GameState;
+import com.iliadonline.client.state.GameState.GameStateEnum;
 import com.iliadonline.shared.data.Location;
 
 public class Hud

@@ -12,6 +12,9 @@ import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.assets.RemoteFileResolver;
 import com.iliadonline.client.render.Render;
+import com.iliadonline.client.render.RenderInterface;
+import com.iliadonline.client.render.debug.DebugRenderer;
+import com.iliadonline.client.state.GameState;
 import com.iliadonline.client.stats.Stats;
 
 /**
@@ -27,7 +30,7 @@ public class IliadClient implements ApplicationListener
 	protected ClientConfig config;
 	protected IliadController controller;
 	
-	protected Render render;
+	protected RenderInterface render;
 	protected GameState gameState;
 	
 	protected Stats stats;
@@ -51,11 +54,11 @@ public class IliadClient implements ApplicationListener
 		this.stats = new Stats();
 		
 		//This accounts for a problem when linking through eclipse
-		//FileHandle dataDir = this.config.getWritableAssetFolder();
-		
-		//assetManager = new AssetManager(new RemoteFileResolver(dataDir));
+		FileHandle dataDir = this.config.getWritableAssetFolder();
+		assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		render = new DebugRenderer(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
 		gameState = new GameState(this.config);
@@ -98,16 +101,16 @@ public class IliadClient implements ApplicationListener
 		this.gameState.processInput();
 		this.gameState.update();
 		
-		//this.render.render(gameState);
+		this.render.render(gameState);
 		
 		this.stats.endRender();
-		Gdx.app.log("Stats", "FPS: " + this.stats.getFps());
-		Gdx.app.log("Stats", "Average Frame: " + this.stats.getAverageFrame());
+		/*Gdx.app.log("Stats", "FPS: " + this.stats.getFps());
+		Gdx.app.log("Stats", "Average Frame: " + this.stats.getAverageFrame());*/
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		//render.resize(width, height);
+		render.resize(width, height);
 	}
 
 	@Override

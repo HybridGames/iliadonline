@@ -1,4 +1,4 @@
-package com.iliadonline.client;
+package com.iliadonline.client.state;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
+import com.iliadonline.client.ClientConfig;
 import com.iliadonline.client.network.LocalServer;
 import com.iliadonline.client.network.RemoteServer;
 import com.iliadonline.client.network.ServerInterface;
