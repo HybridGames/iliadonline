@@ -15,7 +15,7 @@ public class AndroidClientConfig implements ClientConfig
 	}
 
 	@Override
-	public FileHandle getWritableAssetFolder()
+	public FileHandle getWritableFolder()
 	{
 		FileHandle dataDir = Gdx.files.local("data");
 		

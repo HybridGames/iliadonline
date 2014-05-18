@@ -58,7 +58,7 @@ public class GameState
 	public GameState(ClientConfig config)
 	{	
 		this.config = config;
-		this.dataDir = config.getWritableAssetFolder();
+		this.dataDir = config.getWritableFolder();
 		
 		if(!dataDir.file().canWrite())
 		{

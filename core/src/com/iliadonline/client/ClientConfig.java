@@ -11,5 +11,5 @@ public interface ClientConfig
 	public int getRemotePort();
 	
 	public FileHandle getStaticAssetFolder();
-	public FileHandle getWritableAssetFolder();
+	public FileHandle getWritableFolder();
 }

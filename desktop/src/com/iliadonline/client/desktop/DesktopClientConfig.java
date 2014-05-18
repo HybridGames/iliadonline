@@ -15,7 +15,7 @@ public class DesktopClientConfig implements ClientConfig
 	}
 
 	@Override
-	public FileHandle getWritableAssetFolder()
+	public FileHandle getWritableFolder()
 	{
 		FileHandle dataDir = Gdx.files.internal("./bin/data/");
 		return dataDir;

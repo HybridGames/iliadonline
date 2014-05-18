@@ -54,7 +54,7 @@ public class IliadClient implements ApplicationListener
 		this.stats = new Stats();
 		
 		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir = this.config.getWritableAssetFolder();
+		FileHandle dataDir = this.config.getWritableFolder();
 		assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
