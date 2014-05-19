@@ -27,6 +27,8 @@ public class IliadController extends ControllerAdapter
 		super();
 		this.buttonMapping = buttonMapping;
 		this.axisMapping = axisMapping;
+		
+		//Gdx.app.log(tag, "Controller Created");
 	}
 
 	/**
@@ -57,6 +59,8 @@ public class IliadController extends ControllerAdapter
 	@Override
 	public void connected(Controller controller)
 	{
+		Gdx.app.log(tag,  controller.getName() + " : Connected");
+		
 		super.connected(controller);
 	}
 
@@ -66,6 +70,8 @@ public class IliadController extends ControllerAdapter
 	@Override
 	public void disconnected(Controller controller)
 	{
+		Gdx.app.log(tag,  controller.getName() + " : Disonnected");
+		
 		super.disconnected(controller);
 	}
 }

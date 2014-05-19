@@ -1,4 +1,4 @@
-package com.iliadonline.client;
+package com.iliadonline.client.state;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -10,6 +10,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
+import com.iliadonline.client.ClientConfig;
 import com.iliadonline.client.network.LocalServer;
 import com.iliadonline.client.network.RemoteServer;
 import com.iliadonline.client.network.ServerInterface;
@@ -27,6 +28,7 @@ public class GameState
 {
 	private static final String tag = "com.iliadonline.client.GameState";
 	
+	protected ClientConfig config;
 	private ServerInterface server;
 	private FileHandle dataDir;
 	
@@ -53,15 +55,17 @@ public class GameState
 	 * Basic constructor
 	 * @param dataDir
 	 */
-	public GameState(FileHandle dataDir)
-	{
+	public GameState(ClientConfig config)
+	{	
+		this.config = config;
+		this.dataDir = config.getWritableFolder();
+		
 		if(!dataDir.file().canWrite())
 		{
-			//throw new IllegalArgumentException("dataDir must be writable.");
+			throw new IllegalArgumentException("Unable to write to WritableAssetFolder.");
 		}
 		
 		state = GameStateEnum.Started;
-		this.dataDir = dataDir;
 	}
 
 	/**
@@ -156,7 +160,7 @@ public class GameState
 		}
 		else
 		{
-			this.server = new RemoteServer(5679);
+			this.server = new RemoteServer(this.config.getRemoteAddress(), this.config.getRemotePort());
 			this.server.connect();
 		}
 		

@@ -2,6 +2,7 @@ package com.iliadonline.client.render;
 
 import java.util.Collection;
 import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -19,9 +20,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.iliadonline.client.GameState;
-import com.iliadonline.client.GameState.GameStateEnum;
 import com.iliadonline.client.menu.MainMenu;
+import com.iliadonline.client.state.GameState;
+import com.iliadonline.client.state.GameState.GameStateEnum;
 import com.iliadonline.shared.data.GameObject;
 import com.iliadonline.shared.data.IliadMap;
 import com.iliadonline.shared.data.Location;
@@ -32,7 +33,7 @@ import com.iliadonline.shared.data.Location;
  * 	(fonts, sprites, skins, etc.)
  * TODO: Look into using GL20
  */
-public class Render
+public class Render implements RenderInterface
 {
 	private static final String tag = "com.iliadonline.client.render.Render";
 	

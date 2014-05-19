@@ -21,8 +21,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		
-		FileHandle dataDir = Gdx.files.internal("./bin/data/");
-		ClientConfig clientConfig = new ClientConfig(dataDir, dataDir);
+		
+		ClientConfig clientConfig = new DesktopClientConfig();
 		
 		Map<Integer, ControllerActionEnum> buttonMapping = new HashMap<Integer, ControllerActionEnum>();
 		buttonMapping.put(Keys.UP, ControllerActionEnum.MOVE_UP);

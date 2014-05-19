@@ -4,11 +4,18 @@ import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Application.ApplicationType;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.controllers.mappings.Ouya;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.assets.RemoteFileResolver;
 import com.iliadonline.client.render.Render;
+import com.iliadonline.client.render.RenderInterface;
+import com.iliadonline.client.render.debug.DebugRenderer;
+import com.iliadonline.client.state.GameState;
+import com.iliadonline.client.stats.Stats;
 
 /**
  * This is our main Application class in the LibGDX setup.
@@ -23,11 +30,10 @@ public class IliadClient implements ApplicationListener
 	protected ClientConfig config;
 	protected IliadController controller;
 	
-	protected Render render;
+	protected RenderInterface render;
 	protected GameState gameState;
 	
-	private long lastFrame = 0, currentFrame = 0;
-	private float fps = 0.0f;
+	protected Stats stats;
 	
 	protected AssetManager assetManager;
 	
@@ -37,27 +43,29 @@ public class IliadClient implements ApplicationListener
 	public IliadClient(ClientConfig config, IliadController controller)
 	{
 		this.config = config;
+		this.controller = controller;
 	}
 	
 	@Override
 	public void create() 
-	{		
+	{
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
+		this.stats = new Stats();
 		
-		this.lastFrame = System.nanoTime();		
 		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir = this.config.getWritableAssetFolder();
-		
-		//assetManager = new AssetManager(new RemoteFileResolver(dataDir));
+		FileHandle dataDir = this.config.getWritableFolder();
+		assetManager = new AssetManager(new RemoteFileResolver(dataDir));
 		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		render = new DebugRenderer(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
-		gameState = new GameState(dataDir);
+		gameState = new GameState(this.config);
 		
 		Controllers.addListener(controller);
 		
-		gameState.connect(false);
+		gameState.connect(true);
 	}
 	
 	/**
@@ -83,6 +91,7 @@ public class IliadClient implements ApplicationListener
 	@Override
 	public void render() 
 	{
+		this.stats.beginRender();
 		
 		//TODO: Fixed time step on processing messages
 		//Is it beneficial to move ProcessMessage and Update to fixed time steps, so they aren't run every loop?
@@ -92,18 +101,16 @@ public class IliadClient implements ApplicationListener
 		this.gameState.processInput();
 		this.gameState.update();
 		
-		//this.render.render(gameState);
+		this.render.render(gameState);
 		
-		//Simple FPS calculations
-		currentFrame = System.nanoTime();
-		fps = 1000000000f / (currentFrame - lastFrame);
-		lastFrame = currentFrame;
-		//Gdx.app.log(tag, "FPS: " + fps);
+		this.stats.endRender();
+		/*Gdx.app.log("Stats", "FPS: " + this.stats.getFps());
+		Gdx.app.log("Stats", "Average Frame: " + this.stats.getAverageFrame());*/
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		//render.resize(width, height);
+		render.resize(width, height);
 	}
 
 	@Override

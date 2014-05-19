@@ -6,12 +6,14 @@ import com.iliadonline.shared.network.Message;
 
 public class RemoteServer implements ServerInterface
 {
-	private int port;
-	private ClientNetwork network;
+	protected String address;
+	protected int port;
+	protected ClientNetwork network;
 	
-	public RemoteServer(int port)
+	public RemoteServer(String address, int port)
 	{
 		this.port = port;
+		this.address = address;
 	}
 
 	@Override
@@ -29,7 +31,7 @@ public class RemoteServer implements ServerInterface
 	@Override
 	public void connect()
 	{
-		network = new ClientNetwork();
+		network = new ClientNetwork(this.address, this.port);
 		new Thread(network).start();
 	}
 	
