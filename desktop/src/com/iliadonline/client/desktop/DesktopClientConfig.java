@@ -17,7 +17,7 @@ public class DesktopClientConfig implements ClientConfig
 	@Override
 	public FileHandle getWritableFolder()
 	{
-		FileHandle dataDir = Gdx.files.internal("./bin/data/");
+		FileHandle dataDir = Gdx.files.external("iliad/data/");
 		return dataDir;
 	}
 

@@ -2,10 +2,14 @@ package com.iliadonline.client.render.debug;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.iliadonline.client.render.RenderInterface;
@@ -21,7 +25,11 @@ public class DebugRenderer implements RenderInterface
 	protected OrthographicCamera camera;
 	protected ShapeRenderer shapes;
 	protected SpriteBatch batch;
+	
+	protected BitmapFont font;
 
+	protected TextBounds bounds;
+	
 	/**
 	 * @param assetManager
 	 * @param width
@@ -37,7 +45,7 @@ public class DebugRenderer implements RenderInterface
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 		
-		this.assetManager.load("gfx/fonts/arial32.fnt", BitmapFont.class);
+		this.assetManager.load("gfx/fonts/courier32.fnt", BitmapFont.class);
 	}
 	
 	@Override
@@ -49,14 +57,27 @@ public class DebugRenderer implements RenderInterface
 			return;
 		}
 		
-		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		if(font == null)
+		{
+			font = this.assetManager.get("gfx/fonts/courier32.fnt");
+		}
 		
+		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		Gdx.gl.glClear(GL30.GL_COLOR_CLEAR_VALUE);
+				
 		switch(state.getState())
 		{
 			default:
-				batch.begin();
+				batch.begin();		
+				//camera.update();
 				
+				font.setColor(Color.WHITE);
+				CharSequence chars = "Test";
+				bounds = font.draw(batch, chars, 100, 100);
+				
+				batch.end();
+				
+				batch.begin();
 				shapes.begin(ShapeType.Line);
 				shapes.setProjectionMatrix(camera.combined);
 				shapes.setColor(1,0,1,1);
