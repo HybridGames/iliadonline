@@ -1,12 +1,12 @@
 package com.iliadonline.client;
 
 import com.badlogic.gdx.Application;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
+import com.iliadonline.client.asset.IliadFileResolver;
 import com.iliadonline.client.render.RenderInterface;
 import com.iliadonline.client.render.debug.DebugRenderer;
 import com.iliadonline.client.state.GameState;
@@ -31,6 +31,7 @@ public class IliadClient implements ApplicationListener
 	protected Stats stats;
 	
 	protected AssetManager assetManager;
+	protected IliadFileResolver fileResolver;
 	
 	/**
 	 * @param config
@@ -46,14 +47,13 @@ public class IliadClient implements ApplicationListener
 	{
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 
+		this.fileResolver = new IliadFileResolver(this.config);
+		this.assetManager = new AssetManager(this.fileResolver);
+		
 		this.stats = new Stats();
 		
-		//This accounts for a problem when linking through eclipse
-		FileHandle dataDir = this.config.getWritableFolder();
-		assetManager = new AssetManager();
-		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		render = new DebugRenderer(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		render = new DebugRenderer(this.assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
 		gameState = new GameState(this.config);

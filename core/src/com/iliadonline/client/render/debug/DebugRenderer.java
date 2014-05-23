@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.iliadonline.client.render.RenderInterface;
@@ -43,7 +45,7 @@ public class DebugRenderer implements RenderInterface
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 		
-		this.assetManager.load("data/gfx/fonts/arial32.fnt", BitmapFont.class);
+		this.assetManager.load("gfx/fonts/courier32.fnt", BitmapFont.class);
 	}
 	
 	@Override
@@ -57,17 +59,25 @@ public class DebugRenderer implements RenderInterface
 		
 		if(font == null)
 		{
-			font = this.assetManager.get("data/gfx/fonts/arial32.fnt");
+			font = this.assetManager.get("gfx/fonts/courier32.fnt");
 		}
 		
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		Gdx.gl.glClear(GL30.GL_COLOR_CLEAR_VALUE);
-		
+				
 		switch(state.getState())
 		{
 			default:
-				batch.begin();
+				batch.begin();		
+				//camera.update();
 				
+				font.setColor(Color.WHITE);
+				CharSequence chars = "Test";
+				bounds = font.draw(batch, chars, 100, 100);
+				
+				batch.end();
+				
+				batch.begin();
 				shapes.begin(ShapeType.Line);
 				shapes.setProjectionMatrix(camera.combined);
 				shapes.setColor(1,0,1,1);
@@ -76,16 +86,6 @@ public class DebugRenderer implements RenderInterface
 				shapes.line(0-10, 0, 0, 0-10);
 				shapes.line(0, 0-10, 0+10, 0);
 				shapes.end();
-				
-				batch.end();
-				
-				batch.begin();
-				font.setColor(Color.WHITE);
-				CharSequence chars = "Test";
-				bounds = font.draw(batch, chars, 0, 0);
-				
-				Gdx.app.log(tag, font.getData().getImagePath(0));
-				Gdx.app.log(tag, font.getData().fontFile.path());
 				
 				batch.end();
 				break;
