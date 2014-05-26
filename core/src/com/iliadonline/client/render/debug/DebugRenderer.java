@@ -45,7 +45,7 @@ public class DebugRenderer implements RenderInterface
 		batch = new SpriteBatch();
 		shapes = new ShapeRenderer();
 		
-		this.assetManager.load("gfx/fonts/courier32.fnt", BitmapFont.class);
+		this.assetManager.load("gfx/fonts/courier12.fnt", BitmapFont.class);
 	}
 	
 	@Override
@@ -59,7 +59,7 @@ public class DebugRenderer implements RenderInterface
 		
 		if(font == null)
 		{
-			font = this.assetManager.get("gfx/fonts/courier32.fnt");
+			font = this.assetManager.get("gfx/fonts/courier12.fnt");
 		}
 		
 		Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
