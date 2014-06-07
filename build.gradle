@@ -20,12 +20,14 @@ allprojects {
         orgJsonVersion = '20140107'
         hsqldbVersion = '2.3.2'
         sqlToolVersion = '2.3.2'
+        berkeleyDbVersion = '6.0.11'
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "http://repo.springsource.org/libs-release-remote/" }
     }
 }
 
@@ -90,6 +92,7 @@ project(":server") {
         compile "org.json:json:$orgJsonVersion"
         compile "org.hsqldb:hsqldb:$hsqldbVersion"
         compile "org.hsqldb:sqltool:$sqlToolVersion"
+        compile "com.sleepycat:je:$berkeleyDbVersion"  
 	}
 }
 
