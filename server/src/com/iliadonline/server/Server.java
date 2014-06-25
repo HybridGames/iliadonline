@@ -20,12 +20,10 @@ import com.iliadonline.shared.network.Network;
 /**
  * Primary entry point for the Stand-alone Multiplayer Server
  */
-public class ServerMain
+public class Server
 {
 	private static final String tag = "com.iliadonline.server.ServerMain";
 	
-	protected static ServerMain instance;
-
 	protected ServerGameState serverState;
 	protected ClientManager clientManager;
 	protected File serverDir;
@@ -44,7 +42,7 @@ public class ServerMain
 	public int port;
 	public int assetPort;
 
-	protected ServerMain(File serverDir)
+	protected Server(File serverDir)
 	{
 		this.serverDir = serverDir;
 		this.loadConfiguration();
@@ -105,20 +103,6 @@ public class ServerMain
 	}
 
 	/**
-	 * Returns the ServerMain instance This way we should only have one
-	 * singleton and that's because we don't want more than one server running
-	 * in the same code From here other areas of the server should be accessible
-	 * as needed
-	 * 
-	 * @return TODO: Is there a need to get this server, it should only be the
-	 *         network interface through to the ServerGameState object
-	 */
-	public static ServerMain getInstance()
-	{
-		return ServerMain.instance;
-	}
-
-	/**
 	 * Server entry point
 	 * 
 	 * @param args
@@ -148,6 +132,6 @@ public class ServerMain
 		}
 
 		// Logger.getLogger("").setLevel(Level.OFF);
-		ServerMain.instance = new ServerMain(serverDir);
+		new Server(serverDir);
 	}
 }
