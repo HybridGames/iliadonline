@@ -42,6 +42,10 @@ public class Server
 	public int port;
 	public int assetPort;
 
+	/**
+	 * Server requires a Directory to read and write it's data and configurations
+	 * @param serverDir
+	 */
 	protected Server(File serverDir)
 	{
 		this.serverDir = serverDir;
