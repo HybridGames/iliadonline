@@ -16,6 +16,9 @@ import com.iliadonline.server.managers.ClientManager;
 import com.iliadonline.server.managers.ServerGameState;
 import com.iliadonline.server.managers.UUID;
 import com.iliadonline.shared.network.Network;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
 
 /**
  * Primary entry point for the Stand-alone Multiplayer Server
@@ -29,6 +32,8 @@ public class Server
 	protected File serverDir;
 	protected File assetDir;
 
+	protected Environment dbEnvironment = null;
+	
 	protected UUID uuid;
 
 	protected boolean running = false;
@@ -106,6 +111,47 @@ public class Server
 		}
 	}
 
+	/**
+	 * Handles initializing the server environment and necessary modules
+	 */
+	protected void initialize()
+	{
+		this.initData();
+	}
+	
+	/**
+	 * Initializes the Database Environment
+	 */
+	protected void initData()
+	{
+		try
+		{
+			EnvironmentConfig envConfig = new EnvironmentConfig();
+			envConfig.setAllowCreate(true);
+			this.dbEnvironment = new Environment(new File(this.serverDir + "/data"), envConfig);
+		}
+		catch (DatabaseException dbException)
+		{
+			throw new RuntimeException("Database could not be initialized.", dbException);
+		}
+	}
+	
+	/**
+	 * Used to clean up resources like the dbEnvironment
+	 */
+	protected void finalize() throws Throwable
+	{
+		try
+		{
+			this.dbEnvironment.cleanLog();
+			this.dbEnvironment.close();
+		}
+		finally
+		{
+			super.finalize();
+		}
+	}
+	
 	/**
 	 * Server entry point
 	 * 
