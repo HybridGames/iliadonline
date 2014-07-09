@@ -64,8 +64,6 @@ public class ServerGameState implements ClientListener, Runnable
 		//Initialize GameState
 		FileHandle dbDir = dataDir.child("db/db");
 		this.connectDatabase(dbDir);
-		
-		uuid = new UUID(Integer.MIN_VALUE);
 	}
 	
 	public void setIncomingQueue(ConcurrentLinkedQueue<Message> incoming)
@@ -180,13 +178,6 @@ public class ServerGameState implements ClientListener, Runnable
 	{
 		Client client = new Client();
 		clientManager.addClient(client);
-		
-		int id = 0;
-		GameObject object = new GameObject(id);
-		client.sendMessage(new Message((byte)-1, ByteConverter.IntToByteArray(id), client));
-		
-		clientManager.addClient(client);
-		clientObjectMap.put(client, object);
 		return client;
 	}
 
