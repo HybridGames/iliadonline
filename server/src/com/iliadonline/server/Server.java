@@ -16,21 +16,24 @@ import com.iliadonline.server.managers.ClientManager;
 import com.iliadonline.server.managers.ServerGameState;
 import com.iliadonline.server.managers.UUID;
 import com.iliadonline.shared.network.Network;
+import com.sleepycat.je.DatabaseException;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
 
 /**
  * Primary entry point for the Stand-alone Multiplayer Server
  */
-public class ServerMain
+public class Server
 {
 	private static final String tag = "com.iliadonline.server.ServerMain";
 	
-	protected static ServerMain instance;
-
 	protected ServerGameState serverState;
 	protected ClientManager clientManager;
 	protected File serverDir;
 	protected File assetDir;
 
+	protected Environment dbEnvironment = null;
+	
 	protected UUID uuid;
 
 	protected boolean running = false;
@@ -44,7 +47,11 @@ public class ServerMain
 	public int port;
 	public int assetPort;
 
-	protected ServerMain(File serverDir)
+	/**
+	 * Server requires a Directory to read and write it's data and configurations
+	 * @param serverDir
+	 */
+	protected Server(File serverDir)
 	{
 		this.serverDir = serverDir;
 		this.loadConfiguration();
@@ -105,19 +112,46 @@ public class ServerMain
 	}
 
 	/**
-	 * Returns the ServerMain instance This way we should only have one
-	 * singleton and that's because we don't want more than one server running
-	 * in the same code From here other areas of the server should be accessible
-	 * as needed
-	 * 
-	 * @return TODO: Is there a need to get this server, it should only be the
-	 *         network interface through to the ServerGameState object
+	 * Handles initializing the server environment and necessary modules
 	 */
-	public static ServerMain getInstance()
+	protected void initialize()
 	{
-		return ServerMain.instance;
+		this.initData();
 	}
-
+	
+	/**
+	 * Initializes the Database Environment
+	 */
+	protected void initData()
+	{
+		try
+		{
+			EnvironmentConfig envConfig = new EnvironmentConfig();
+			envConfig.setAllowCreate(true);
+			this.dbEnvironment = new Environment(new File(this.serverDir + "/data"), envConfig);
+		}
+		catch (DatabaseException dbException)
+		{
+			throw new RuntimeException("Database could not be initialized.", dbException);
+		}
+	}
+	
+	/**
+	 * Used to clean up resources like the dbEnvironment
+	 */
+	protected void finalize() throws Throwable
+	{
+		try
+		{
+			this.dbEnvironment.cleanLog();
+			this.dbEnvironment.close();
+		}
+		finally
+		{
+			super.finalize();
+		}
+	}
+	
 	/**
 	 * Server entry point
 	 * 
@@ -148,6 +182,6 @@ public class ServerMain
 		}
 
 		// Logger.getLogger("").setLevel(Level.OFF);
-		ServerMain.instance = new ServerMain(serverDir);
+		new Server(serverDir);
 	}
 }

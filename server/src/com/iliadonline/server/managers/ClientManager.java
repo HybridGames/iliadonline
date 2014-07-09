@@ -14,11 +14,19 @@ public class ClientManager
 	protected ArrayList<Client> clients;
 
 	/**
-	 * Default Constructor
+	 * Defaulted Constructor
 	 */
 	public ClientManager()
 	{
-		this.clients = new ArrayList<Client>();
+		this(200);
+	}
+	
+	/**
+	 * Constructor
+	 */
+	public ClientManager(int maxClients)
+	{
+		this.clients = new ArrayList<Client>(maxClients);
 	}
 
 	/**

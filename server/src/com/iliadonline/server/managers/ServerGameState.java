@@ -1,26 +1,22 @@
 package com.iliadonline.server.managers;
 
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.nio.channels.SocketChannel;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.iliadonline.server.data.DataInterface;
-import com.iliadonline.server.data.HsqlDataProvider;
 import com.iliadonline.server.objects.GameObject;
 import com.iliadonline.server.objects.IliadMap;
 import com.iliadonline.shared.network.ByteConverter;
 import com.iliadonline.shared.network.Client;
 import com.iliadonline.shared.network.ClientListener;
 import com.iliadonline.shared.network.Message;
+import com.sleepycat.je.Environment;
+import com.sleepycat.je.EnvironmentConfig;
 
 /**
  * ServerGameState acts as the main running loop for the server.
@@ -38,12 +34,9 @@ public class ServerGameState implements ClientListener, Runnable
 	protected ClientManager clientManager;
 	private ConcurrentLinkedQueue<Message> incoming;
 	
-	protected DataInterface data;
-	
 	protected ArrayList<IliadMap> maps;
 	protected ObjectMap<Client, GameObject> clientObjectMap;	//Maps clients to the GameObject that is their character
 
-	private UUID uuid;
 	private long currentTime;
 	
 	private Message message;
@@ -51,6 +44,8 @@ public class ServerGameState implements ClientListener, Runnable
 	private boolean paused;
 	
 	private GameObject gameObject;
+	
+	protected Environment dbEnv;
 	
 	/**
 	 * Basic constructor
@@ -68,9 +63,7 @@ public class ServerGameState implements ClientListener, Runnable
 		//Load Data
 		//Initialize GameState
 		FileHandle dbDir = dataDir.child("db/db");
-		//this.connectDatabase(dbDir);
-		
-		uuid = new UUID(Integer.MIN_VALUE);
+		this.connectDatabase(dbDir);
 	}
 	
 	public void setIncomingQueue(ConcurrentLinkedQueue<Message> incoming)
@@ -80,29 +73,18 @@ public class ServerGameState implements ClientListener, Runnable
 	
 	/**
 	 * Helper function that establishes our connection to the database.
-	 * TODO: Should initialize the database with proper schema
 	 * @param dbDir
 	 */
 	protected void connectDatabase(FileHandle dbDir)
 	{
-		if(!dbDir.exists())
+		if(!dbDir.isDirectory())
 		{
 			dbDir.mkdirs();
 		}
-		try
-		{
-			this.data = new HsqlDataProvider(dbDir.file(), true);
-		}
-		catch (SQLException e)
-		{
-			//TODO: Fail to start server with some message
-			e.printStackTrace();
-		}
-		catch (Exception e)
-		{
-			//TODO: most likely the Hsql Driver failed
-			e.printStackTrace();
-		}
+		
+		EnvironmentConfig configuration = new EnvironmentConfig();
+		configuration.setAllowCreate(true);
+		this.dbEnv = new Environment(dbDir.file(), configuration);
 	}
 	
 	/**
@@ -196,13 +178,6 @@ public class ServerGameState implements ClientListener, Runnable
 	{
 		Client client = new Client();
 		clientManager.addClient(client);
-		
-		int id = 0;
-		GameObject object = new GameObject(id);
-		client.sendMessage(new Message((byte)-1, ByteConverter.IntToByteArray(id), client));
-		
-		clientManager.addClient(client);
-		clientObjectMap.put(client, object);
 		return client;
 	}
 

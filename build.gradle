@@ -21,6 +21,7 @@ allprojects {
         hsqldbVersion = '2.3.2'
         sqlToolVersion = '2.3.2'
         berkeleyDbVersion = '6.0.11'
+        jUnitVersion = '4.11'
     }
 
     repositories {
@@ -28,6 +29,10 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "http://repo.springsource.org/libs-release-remote/" }
+    }
+    
+    dependencies {
+    	//testCompile group: 'junit', name: 'junit', version: $jUnitVersion
     }
 }
 
@@ -92,7 +97,7 @@ project(":server") {
         compile "org.json:json:$orgJsonVersion"
         compile "org.hsqldb:hsqldb:$hsqldbVersion"
         compile "org.hsqldb:sqltool:$sqlToolVersion"
-        compile "com.sleepycat:je:$berkeleyDbVersion"  
+        compile "com.sleepycat:je:$berkeleyDbVersion"
 	}
 }
 
