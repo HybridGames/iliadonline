@@ -173,16 +173,24 @@ public class GameState
 	 */
 	public void processInput()
 	{
-		/*
-		 * @todo need better way to process input
-		if(OuyaFacade.getInstance().isRunningOnOUYAHardware())
+		if(Controllers.getControllers().size <= 0)
 		{
-			processInputOuya();
+			this.processKeyboard();
+			return;
 		}
-		else
+		
+		Controller controller = Controllers.getControllers().get(0);
+		
+		if(controller.getName() == "OUYA Game Controller")
 		{
-			processInputPC();
-		}*/
+			this.processInputOuya();
+		}
+		
+	}
+	
+	protected void processKeyboard()
+	{
+		
 	}
 	
 	/**
@@ -209,7 +217,7 @@ public class GameState
 			case Started:
 				if(controller.getButton(Ouya.BUTTON_O))
 				{
-					this.connect(true);
+					this.connect(false);
 				}
 				break;				
 			case MainMenu:

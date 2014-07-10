@@ -2,11 +2,13 @@ package com.iliadonline.client;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.asset.IliadFileResolver;
+import com.iliadonline.client.menu.MainMenuScreen;
 import com.iliadonline.client.render.RenderInterface;
 import com.iliadonline.client.render.debug.DebugRenderer;
 import com.iliadonline.client.state.GameState;
@@ -18,7 +20,7 @@ import com.iliadonline.client.stats.Stats;
  * 
  * @todo Game crashes if a controller isn't setup
  */
-public class IliadClient implements ApplicationListener 
+public class IliadClient extends Game 
 {
 	private static final String tag = "com.iliadonline.client.IliadClient";
 	
@@ -60,7 +62,9 @@ public class IliadClient implements ApplicationListener
 		
 		Controllers.addListener(controller);
 		
-		gameState.connect(true);
+		gameState.connect(false);
+		
+		this.setScreen(new MainMenuScreen(this));
 	}
 	
 	/**
@@ -86,6 +90,7 @@ public class IliadClient implements ApplicationListener
 	@Override
 	public void render() 
 	{
+		super.render();
 		this.stats.beginRender();
 		
 		//TODO: Fixed time step on processing messages

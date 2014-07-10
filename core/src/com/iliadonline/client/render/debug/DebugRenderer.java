@@ -72,8 +72,14 @@ public class DebugRenderer implements RenderInterface
 				//camera.update();
 				
 				font.setColor(Color.WHITE);
-				CharSequence chars = "Test";
+				CharSequence chars = state.getState().toString();
 				bounds = font.draw(batch, chars, 100, 100);
+				
+				if(state.getPlayer() != null)
+				{
+					chars = state.getPlayer().getLocation().getX() + ", " + state.getPlayer().getLocation().getY();
+					bounds = font.draw(batch, chars, 980, 100);
+				}
 				
 				batch.end();
 				

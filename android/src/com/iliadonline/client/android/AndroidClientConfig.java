@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.iliadonline.client.ClientConfig;
 
+/**
+ * An extension of the ClientConfig that allows us to pass specific data into our application
+ */
 public class AndroidClientConfig implements ClientConfig
 {
 
@@ -44,7 +47,8 @@ public class AndroidClientConfig implements ClientConfig
 	@Override
 	public String getRemoteAddress()
 	{
-		return "127.0.0.1";
+		//return "127.0.0.1";
+		return "192.168.1.2";
 	}
 
 	@Override
