@@ -11,6 +11,7 @@ import com.iliadonline.client.asset.IliadFileResolver;
 import com.iliadonline.client.menu.MainMenuScreen;
 import com.iliadonline.client.render.RenderInterface;
 import com.iliadonline.client.render.debug.DebugRenderer;
+import com.iliadonline.client.splash.SplashScreen;
 import com.iliadonline.client.state.GameState;
 import com.iliadonline.client.stats.Stats;
 
@@ -55,7 +56,7 @@ public class IliadClient extends Game
 		this.stats = new Stats();
 		
 		//render = new Render(assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-		render = new DebugRenderer(this.assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		//render = new DebugRenderer(this.assetManager, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 										
 		//Manages data about the game
 		gameState = new GameState(this.config);
@@ -64,7 +65,8 @@ public class IliadClient extends Game
 		
 		gameState.connect(false);
 		
-		this.setScreen(new MainMenuScreen(this));
+		this.setScreen(new SplashScreen(this));
+		//this.setScreen(new MainMenuScreen(this));
 	}
 	
 	/**
@@ -90,27 +92,12 @@ public class IliadClient extends Game
 	@Override
 	public void render() 
 	{
-		super.render();
-		this.stats.beginRender();
-		
-		//TODO: Fixed time step on processing messages
-		//Is it beneficial to move ProcessMessage and Update to fixed time steps, so they aren't run every loop?
-		while(gameState.processMessage());
-		
-		//TODO: can we combine processInput and update into one call?
-		this.gameState.processInput();
-		this.gameState.update();
-		
-		this.render.render(gameState);
-		
-		this.stats.endRender();
-		/*Gdx.app.log("Stats", "FPS: " + this.stats.getFps());
-		Gdx.app.log("Stats", "Average Frame: " + this.stats.getAverageFrame());*/
+		super.render();		
 	}
 
 	@Override
 	public void resize(int width, int height) {
-		render.resize(width, height);
+		//render.resize(width, height);
 	}
 
 	@Override
@@ -119,5 +106,40 @@ public class IliadClient extends Game
 
 	@Override
 	public void resume() {
+	}
+
+	public ClientConfig getConfig()
+	{
+		return config;
+	}
+
+	public IliadController getController()
+	{
+		return controller;
+	}
+
+	public RenderInterface getRender()
+	{
+		return render;
+	}
+
+	public GameState getGameState()
+	{
+		return gameState;
+	}
+
+	public Stats getStats()
+	{
+		return stats;
+	}
+
+	public AssetManager getAssetManager()
+	{
+		return assetManager;
+	}
+
+	public IliadFileResolver getFileResolver()
+	{
+		return fileResolver;
 	}	
 }
